@@ -87,6 +87,8 @@ class ListGroupsActivity : AppCompatActivity() {
         if (requestCode == 1){
             if (resultCode == ActivityPostCode.SAVE_ITEM){
                 val group =  data?.extras?.get("group") as GroupEntity
+                group.url = moveImageToOriginalDir(group.url)
+
                 viewModel.addGroupToDB(group)
             }
         } else if(requestCode == 2){
@@ -94,14 +96,9 @@ class ListGroupsActivity : AppCompatActivity() {
                 val group =  data?.extras?.get("group") as GroupEntity
                 val oldPicturePath =  data?.extras?.get("old_url") as String
 
-                if(oldPicturePath != ""){
-                    File(Dir.homeDirOnMemory + "/" + oldPicturePath).delete()
-                }
+                if(oldPicturePath != "") File(Dir.homeDirOnMemory + "/" + oldPicturePath).delete()
 
-                val tmpPath = group.url
-                val originalPath = group.url.replace("tmp_image", "image")
-                moveImageToOriginalDir(tmpPath, originalPath)
-                group.url = originalPath
+                group.url = moveImageToOriginalDir(group.url)
 
                 viewModel.updateGroupToDB(group)
                 recyclerView.UpdateItem(group)
@@ -118,10 +115,14 @@ class ListGroupsActivity : AppCompatActivity() {
         }
     }
 
-    private fun moveImageToOriginalDir(tmpPath: String, originalPath: String){
+    private fun moveImageToOriginalDir(tmpPath: String): String{
+        val originalPath = tmpPath.replace("tmp_image", "image")
+
         File(Dir.homeDirOnMemory + "/" + tmpPath).let { sourceFile ->
             sourceFile.copyTo(File(Dir.homeDirOnMemory + "/" + originalPath))
             sourceFile.delete()
         }
+
+        return originalPath
     }
 }
