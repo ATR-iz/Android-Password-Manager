@@ -76,7 +76,7 @@ class ListGroupsRecyclerViewAdapter: RecyclerView.Adapter<ListGroupsRecyclerView
 
         fun bind(model: GroupEntity){
             txtGroup.text = model.name
-            imgImage.setImageURI(Uri.parse(Dir.homeDir + "/" + model.url))
+            imgImage.setImageURI(Uri.parse(Dir.homeDirOnMemory + "/" + model.url))
 
             itemView.setOnClickListener {
                 delegate?.OpenGroup(itemGroup = model)

@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ActivityListGroupsBinding
+import com.atriztech.passwordmanager.model.Dir
 import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsDelegate
 import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsRecyclerViewAdapter
 import com.atriztech.passwordmanager.viewmodel.ListGroupsViewModel
+import java.io.File
 
 class ListGroupsActivity : AppCompatActivity() {
     private lateinit var binding : ActivityListGroupsBinding
@@ -90,13 +92,36 @@ class ListGroupsActivity : AppCompatActivity() {
         } else if(requestCode == 2){
             if (resultCode == ActivityPostCode.SAVE_ITEM){
                 val group =  data?.extras?.get("group") as GroupEntity
+                val oldPicturePath =  data?.extras?.get("old_url") as String
+
+                if(oldPicturePath != ""){
+                    File(Dir.homeDirOnMemory + "/" + oldPicturePath).delete()
+                }
+
+                val tmpPath = group.url
+                val originalPath = group.url.replace("tmp_image", "image")
+                moveImageToOriginalDir(tmpPath, originalPath)
+                group.url = originalPath
+
                 viewModel.updateGroupToDB(group)
                 recyclerView.UpdateItem(group)
             } else if (resultCode == ActivityPostCode.DELETE_ITEM){
                 val group =  data?.extras?.get("group") as GroupEntity
+
+                if(group.url != ""){
+                    File(Dir.homeDirOnMemory + "/" + group.url).delete()
+                }
+
                 viewModel.deleteGroupFromDB(group)
                 recyclerView.DeleteItem(group)
             }
+        }
+    }
+
+    private fun moveImageToOriginalDir(tmpPath: String, originalPath: String){
+        File(Dir.homeDirOnMemory + "/" + tmpPath).let { sourceFile ->
+            sourceFile.copyTo(File(Dir.homeDirOnMemory + "/" + originalPath))
+            sourceFile.delete()
         }
     }
 }

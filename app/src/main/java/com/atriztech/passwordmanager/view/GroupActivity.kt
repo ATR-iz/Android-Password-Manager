@@ -11,6 +11,7 @@ import com.atriztech.passwordmanager.databinding.ActivityGroupBinding
 import com.atriztech.passwordmanager.model.Dir
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.viewmodel.GroupViewModel
+import java.io.File
 
 class GroupActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGroupBinding
@@ -33,7 +34,7 @@ class GroupActivity : AppCompatActivity() {
             var group = intent?.extras?.get("group") as GroupEntity
             viewModel.group.set(group)
             binding.deleteItem.visibility = View.VISIBLE
-            binding.groupImage.setImageURI(Uri.parse(Dir.homeDir + "/" +  viewModel.group.get()!!.url))
+            binding.groupImage.setImageURI(Uri.parse(Dir.homeDirOnMemory + "/" +  viewModel.group.get()!!.url))
         }
     }
 
@@ -47,6 +48,7 @@ class GroupActivity : AppCompatActivity() {
     fun saveGroup(view: View){
         val newIntent = Intent()
         newIntent.putExtra("group", viewModel.group.get())
+        newIntent.putExtra("old_url", viewModel.old_url)
         setResult(ActivityPostCode.SAVE_ITEM, newIntent)
         this.finish()
     }
@@ -68,13 +70,12 @@ class GroupActivity : AppCompatActivity() {
 
         if (requestCode == 1){
             if (resultCode == ActivityPostCode.SAVE_ITEM){
-                val path =  data?.extras?.getString("imagePath") as String
+                val group = viewModel.group.get()!!
+                viewModel.old_url = group.url
+                group.url = data?.extras?.getString("imagePath") as String
 
-                val test = viewModel.group.get()!!
-                test.url = path
-
-                viewModel.group.set(test)
-                binding.groupImage.setImageURI(Uri.parse(Dir.homeDir + "/" + path))
+                viewModel.group.set(group)
+                binding.groupImage.setImageURI(Uri.parse(Dir.homeDirOnMemory + "/" + group.url))
             }
         }
     }

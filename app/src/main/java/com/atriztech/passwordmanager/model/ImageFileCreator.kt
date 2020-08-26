@@ -10,8 +10,7 @@ import java.io.FileOutputStream
 class ImageFileCreator {
     companion object{
         fun createImageCache(bitmap: Bitmap): String {
-            Dir.createHomeDir(false)
-            val imageDir = Dir.createDir(Dir.imageDir, false)
+            val imageDir = Dir.homeDirOnMemory + "/tmp_image"
 
             val image = File.createTempFile("cache_", ".jpg", File(imageDir))
             val stream = FileOutputStream(image)

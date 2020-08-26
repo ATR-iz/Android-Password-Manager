@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.room.Room
 import com.atriztech.passwordmanager.R
+import com.atriztech.passwordmanager.model.Dir
 import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.viewmodel.MainViewModel
 
@@ -14,8 +15,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var viewModel = MainViewModel()
+        createDirs()
 
+        var viewModel = MainViewModel()
         viewModel.status.observe(this, Observer {
             passKey -> if(passKey == "First") startNewPasswordScreen()
                     else startPasswordScreen(passKey)
@@ -24,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         var db = Room.databaseBuilder(this, GroupWithItemDB::class.java, "db").build()
 
         viewModel.getTestDataFromDB(db)
-
     }
 
     private fun startNewPasswordScreen(){
@@ -40,4 +41,9 @@ class MainActivity : AppCompatActivity() {
         this.finish()
     }
 
+    private fun createDirs(){
+        Dir.homeDirOnMemory = this.application.filesDir.absoluteFile.toString()
+        Dir.createDir(Dir.homeDirOnMemory + "/image", false)
+        Dir.createDir(Dir.homeDirOnMemory + "/tmp_image", true)
+    }
 }

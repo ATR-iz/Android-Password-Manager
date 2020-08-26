@@ -6,13 +6,8 @@ import java.io.File
 class Dir {
     companion object {
 
-        val homeDir = Environment.getExternalStorageDirectory().toString() + "/PasswordManager"
-        val imageDir = "$homeDir/Image"
-
-        fun createHomeDir(ifDirExistsDelete: Boolean): String{
-            createDir(homeDir, ifDirExistsDelete)
-            return homeDir
-        }
+        var homeDirOnSDCard = Environment.getExternalStorageDirectory().toString() + "/PasswordManager"
+        var homeDirOnMemory = ""
 
         fun createDir(path: String, ifDirExistsDelete: Boolean): String{
             val file = File(path)
