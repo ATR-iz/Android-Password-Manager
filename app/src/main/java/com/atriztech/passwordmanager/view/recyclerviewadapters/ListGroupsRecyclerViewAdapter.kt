@@ -1,11 +1,16 @@
 package com.atriztech.passwordmanager.view.recyclerviewadapters
 
+import android.graphics.Paint
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.LAYER_TYPE_HARDWARE
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.atriztech.passwordmanager.R
+import com.atriztech.passwordmanager.model.Dir
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import java.util.*
 
@@ -67,9 +72,11 @@ class ListGroupsRecyclerViewAdapter: RecyclerView.Adapter<ListGroupsRecyclerView
 
     class ViewHolder(itemGroupView: View, val delegate: ListGroupsDelegate?): RecyclerView.ViewHolder(itemGroupView){
         private val txtGroup: TextView = itemGroupView.findViewById(R.id.group_name)
+        private val imgImage: ImageView = itemView.findViewById(R.id.group_image)
 
         fun bind(model: GroupEntity){
             txtGroup.text = model.name
+            imgImage.setImageURI(Uri.parse(Dir.homeDir + "/" + model.url))
 
             itemView.setOnClickListener {
                 delegate?.OpenGroup(itemGroup = model)
@@ -79,6 +86,8 @@ class ListGroupsRecyclerViewAdapter: RecyclerView.Adapter<ListGroupsRecyclerView
                 delegate?.EditGroup(itemGroup = model)
                 return@setOnLongClickListener true
             }
+
+
         }
     }
 }

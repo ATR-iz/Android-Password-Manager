@@ -1,12 +1,14 @@
 package com.atriztech.passwordmanager.view
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ActivityGroupBinding
+import com.atriztech.passwordmanager.model.Dir
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.viewmodel.GroupViewModel
 
@@ -28,9 +30,10 @@ class GroupActivity : AppCompatActivity() {
         if(code == 1){
             binding.deleteItem.visibility = View.INVISIBLE
         } else if(code == 2){
-            binding.deleteItem.visibility = View.VISIBLE
             var group = intent?.extras?.get("group") as GroupEntity
             viewModel.group.set(group)
+            binding.deleteItem.visibility = View.VISIBLE
+            binding.groupImage.setImageURI(Uri.parse(Dir.homeDir + "/" +  viewModel.group.get()!!.url))
         }
     }
 
@@ -53,5 +56,26 @@ class GroupActivity : AppCompatActivity() {
         val newIntent = Intent()
         setResult(ActivityPostCode.CANCEL, newIntent)
         finish()
+    }
+
+    fun openPicture(view: View){
+        val intent = Intent(applicationContext, ImageActivity::class.java)
+        startActivityForResult(intent, 1)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1){
+            if (resultCode == ActivityPostCode.SAVE_ITEM){
+                val path =  data?.extras?.getString("imagePath") as String
+
+                val test = viewModel.group.get()!!
+                test.url = path
+
+                viewModel.group.set(test)
+                binding.groupImage.setImageURI(Uri.parse(Dir.homeDir + "/" + path))
+            }
+        }
     }
 }
