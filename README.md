@@ -1,8 +1,8 @@
 #Kotlin #RXJava #MVVM #DataBinding #Room
 
-Приложение для Android.
+РџСЂРёР»РѕР¶РµРЅРёРµ РґР»СЏ Android.
 
-Разработано для хранения логина и пароля в памяти, в зашифрованном виде.
+Р Р°Р·СЂР°Р±РѕС‚Р°РЅРѕ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ Р»РѕРіРёРЅР° Рё РїР°СЂРѕР»СЏ РІ РїР°РјСЏС‚Рё, РІ Р·Р°С€РёС„СЂРѕРІР°РЅРЅРѕРј РІРёРґРµ.
 
 ![](https://github.com/ATRiz-Tech/Android-Password-Manager/blob/master/Image/1.png) ![](https://github.com/ATRiz-Tech/Android-Password-Manager/blob/master/Image/2.png)
 ![](https://github.com/ATRiz-Tech/Android-Password-Manager/blob/master/Image/3.png) ![](https://github.com/ATRiz-Tech/Android-Password-Manager/blob/master/Image/4.png)
