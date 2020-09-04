@@ -29,6 +29,8 @@ class ListItemsActivity : AppCompatActivity() {
         val password = intent?.extras?.get("password") as String
         group = intent?.extras?.get("group") as GroupEntity
 
+        title = group.name
+
         val db = Room.databaseBuilder(this, GroupWithItemDB::class.java, "db").build()
 
         viewModel = ListItemsViewModel(db, password)

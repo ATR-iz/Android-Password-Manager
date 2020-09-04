@@ -116,11 +116,15 @@ class ListGroupsActivity : AppCompatActivity() {
     }
 
     private fun moveImageToOriginalDir(tmpPath: String): String{
-        val originalPath = tmpPath.replace("tmp_image", "image")
+        var originalPath = tmpPath
 
-        File(Dir.homeDirOnMemory + "/" + tmpPath).let { sourceFile ->
-            sourceFile.copyTo(File(Dir.homeDirOnMemory + "/" + originalPath))
-            sourceFile.delete()
+        if(tmpPath.indexOf("tmp_image") >= 0){
+            originalPath = tmpPath.replace("tmp_image", "image")
+
+            File(Dir.homeDirOnMemory + "/" + tmpPath).let { sourceFile ->
+                sourceFile.copyTo(File(Dir.homeDirOnMemory + "/" + originalPath))
+                sourceFile.delete()
+            }
         }
 
         return originalPath

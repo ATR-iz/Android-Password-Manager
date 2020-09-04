@@ -20,6 +20,8 @@ class GroupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        title = "Edit group"
+
         viewModel = GroupViewModel()
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_group)

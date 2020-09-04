@@ -28,17 +28,20 @@ class ItemActivity : AppCompatActivity() {
 
         when(code){
             1 -> {
+                title = "Create item"
                 binding.deleteItem.visibility = View.INVISIBLE
                 binding.itemGroupName.isEnabled = false
                 val group = intent?.extras?.get("group") as GroupEntity
                 viewModel.item.set(ItemGroupEntity(ItemEntity(name = "", password = "", idGroup = group.id), group))
             }
             2 -> {
+                title = "Edit item"
                 binding.deleteItem.visibility = View.VISIBLE
                 val item = intent?.extras?.get("item") as ItemGroupEntity
                 viewModel.item.set(item)
             }
             3-> {
+                title = "View item"
                 val item = intent?.extras?.get("item") as ItemGroupEntity
                 viewModel.item.set(item)
 
