@@ -1,14 +1,14 @@
 package com.atriztech.passwordmanager.view
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.room.Room
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.model.Dir
 import com.atriztech.passwordmanager.model.database.GroupWithItemDB
-import com.atriztech.passwordmanager.viewmodel.MainViewModel
+import com.atriztech.passwordmanager.viewmodels.MainViewModel
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,8 +19,8 @@ class MainActivity : AppCompatActivity() {
 
         var viewModel = MainViewModel()
         viewModel.status.observe(this, Observer {
-            passKey -> if(passKey == "First") startNewPasswordScreen()
-                    else startPasswordScreen(passKey)
+            passKey -> if(passKey == "First") startNewPasswordFragment()
+                    else startLoginFragment(passKey)
         })
 
         var db = Room.databaseBuilder(this, GroupWithItemDB::class.java, "db").build()
@@ -28,17 +28,14 @@ class MainActivity : AppCompatActivity() {
         viewModel.getTestDataFromDB(db)
     }
 
-    private fun startNewPasswordScreen(){
-        val intent = Intent(applicationContext, NewPasswordActivity::class.java)
-        startActivity(intent)
-        this.finish()
+    private fun startNewPasswordFragment(){
+        findNavController(R.id.container).navigate(R.id.action_main_fragment_to_new_password_fragment, Bundle())
     }
 
-    private fun startPasswordScreen(passKey: String){
-        val intent = Intent(applicationContext, LoginActivity::class.java)
-        intent.putExtra("pass_key", passKey)
-        startActivity(intent)
-        this.finish()
+    private fun startLoginFragment(passKey: String){
+        var bundle = Bundle()
+        bundle.putString("pass_key", passKey)
+        findNavController(R.id.container).navigate(R.id.action_main_fragment_to_login_fragment, bundle)
     }
 
     private fun createDirs(){

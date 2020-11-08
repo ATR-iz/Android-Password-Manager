@@ -4,7 +4,11 @@
     <data>
         <variable
             name="viewModel"
-            type="com.atriztech.passwordmanager.viewmodel.GroupViewModel"
+            type="com.atriztech.passwordmanager.viewmodels.GroupViewModel"
+            />
+        <variable
+            name="fragment"
+            type="com.atriztech.passwordmanager.view.GroupFragment"
             />
     </data>
 
@@ -59,7 +63,7 @@
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:text="Delete"
-                android:onClick="deleteGroup"/>
+                android:onClick="@{(v) -> fragment.deleteGroup(v)}"/>
 
             <Button
                 android:id="@+id/save_item"
@@ -67,7 +71,7 @@
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:text="Save"
-                android:onClick="saveGroup"/>
+                android:onClick="@{(v) -> fragment.saveGroup(v)}"/>
         </LinearLayout>
     </FrameLayout>
 </layout>

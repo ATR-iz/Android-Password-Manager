@@ -1,10 +1,10 @@
-package com.atriztech.passwordmanager.viewmodel
+package com.atriztech.passwordmanager.viewmodels
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
-import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
-import com.atriztech.passwordmanager.model.entity.ItemEntity
 import com.atriztech.passwordmanager.model.entity.GroupEntity
+import com.atriztech.passwordmanager.model.entity.ItemEntity
+import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
 
 class ItemViewModel: ViewModel() {
     var item = ObservableField<ItemGroupEntity>(ItemGroupEntity(ItemEntity(name = "", password = "", idGroup = 0), GroupEntity(name = "", url = "")))
