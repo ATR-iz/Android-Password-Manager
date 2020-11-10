@@ -36,13 +36,18 @@ class ListItemsViewModel(var db: GroupWithItemDB, val password: String): ViewMod
 
     fun addItemToDB(itemGroup: ItemGroupEntity){
         Observable.fromCallable {
-            itemGroup.item.name = Encoding.encode(password, itemGroup.item.name)
-            itemGroup.item.password = Encoding.encode(password, itemGroup.item.password!!)
-            itemGroup.group.name = Encoding.encode(password, itemGroup.group.name)
-            itemGroup.group.url = Encoding.encode(password, itemGroup.group.url)
+            var tmpItemGroup = ItemGroupEntity(ItemEntity("","", 0), GroupEntity("", ""))
 
-            var id = db.itemDao().insert(itemGroup)
-            var tmpItemGroup = db.itemDao().getItemGroup(id)
+            tmpItemGroup.item.id = itemGroup.item.id
+            tmpItemGroup.item.idGroup = itemGroup.item.idGroup
+            tmpItemGroup.group.id = itemGroup.group.id
+            tmpItemGroup.item.name = Encoding.encode(password, itemGroup.item.name)
+            tmpItemGroup.item.password = Encoding.encode(password, itemGroup.item.password!!)
+            tmpItemGroup.group.name = Encoding.encode(password, itemGroup.group.name)
+            tmpItemGroup.group.url = Encoding.encode(password, itemGroup.group.url)
+
+            var id = db.itemDao().insert(tmpItemGroup)
+            tmpItemGroup = db.itemDao().getItemGroup(id)
 
             tmpItemGroup.item.name = Decoding.decode(password, tmpItemGroup.item.name)
             tmpItemGroup.item.password = Decoding.decode(password, tmpItemGroup.item.password!!)

@@ -1,7 +1,11 @@
 package com.atriztech.passwordmanager.view
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +15,11 @@ import androidx.fragment.app.setFragmentResult
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.GroupFragmentBinding
 import com.atriztech.passwordmanager.model.Dir
+import com.atriztech.passwordmanager.model.ImageFileCreator
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.viewmodels.GroupViewModel
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 
 class GroupFragment : Fragment() {
     private lateinit var binding: GroupFragmentBinding
@@ -40,11 +47,9 @@ class GroupFragment : Fragment() {
                 binding.deleteItem.visibility = View.VISIBLE
                 binding.groupImage.setImageURI(Uri.parse(Dir.homeDirOnMemory + "/" +  viewModel.group.get()!!.url))
             }
-
-            return binding.root
-        } else {
-            return binding.root
         }
+
+        return binding.root
     }
 
     fun deleteGroup(view: View){
@@ -70,7 +75,32 @@ class GroupFragment : Fragment() {
     }
 
     fun openPicture(view: View){
-        //val intent = Intent(this.context, ImageActivity::class.java)
-        //startActivityForResult(intent, 1)
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        this.requireActivity().startActivityFromFragment(this, Intent.createChooser(intent, "Select Picture"), 1)
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1){
+            if (resultCode == Activity.RESULT_OK){
+                Observable.fromCallable {
+
+                    val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.requireActivity().contentResolver, data?.data)
+                    val shortPath = ImageFileCreator.createImageCache(bitmap)
+
+                    val group = viewModel.group.get()!!
+                    viewModel.old_url = group.url
+                    group.url = shortPath
+
+                    viewModel.group.set(group)
+                    binding.groupImage.setImageURI(Uri.parse(Dir.homeDirOnMemory + "/" + group.url))
+
+                }.observeOn(Schedulers.computation())
+                    .subscribe()
+            }
+        }
     }
 }

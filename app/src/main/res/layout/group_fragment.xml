@@ -30,7 +30,7 @@
 
             <ImageView
                 android:id="@+id/group_image"
-                android:onClick="openPicture"
+                android:onClick="@{(v) -> fragment.openPicture(v)}"
                 android:layout_gravity="center"
                 android:layout_width="120dp"
                 android:layout_height="120dp"

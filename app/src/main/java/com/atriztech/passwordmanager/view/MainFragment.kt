@@ -5,56 +5,61 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.room.Room
 import com.atriztech.passwordmanager.R
+import com.atriztech.passwordmanager.databinding.MainFragmentBinding
+import com.atriztech.passwordmanager.model.Dir
+import com.atriztech.passwordmanager.model.database.GroupWithItemDB
+import com.atriztech.passwordmanager.viewmodels.MainViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MainFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: MainFragmentBinding
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.main_fragment, container, false)
+
+        if (!retainInstance ) {
+            retainInstance = true
+
+            createDirs()
+            viewModel = MainViewModel()
+
+            binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
+            binding.viewModel = viewModel
+            binding.fragment = this
+
+            viewModel.status.observe(this.requireActivity(), Observer {
+                    passKey -> if(passKey == "First") startNewPasswordFragment()
+            else startLoginFragment(passKey)
+            })
+
+            var db = Room.databaseBuilder(this.requireActivity(), GroupWithItemDB::class.java, "db").build()
+
+            viewModel.getTestDataFromDB(db)
+        }
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MainFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MainFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun startNewPasswordFragment(){
+        findNavController().navigate(R.id.action_main_fragment_to_new_password_fragment, Bundle())
+    }
+
+    private fun startLoginFragment(passKey: String){
+        var bundle = Bundle()
+        bundle.putString("pass_key", passKey)
+        findNavController().navigate(R.id.action_main_fragment_to_login_fragment, bundle)
+    }
+
+    private fun createDirs(){
+        Dir.homeDirOnMemory = requireActivity().filesDir.absoluteFile.toString()
+        Dir.createDir(Dir.homeDirOnMemory + "/image", false)
+        Dir.createDir(Dir.homeDirOnMemory + "/tmp_image", true)
     }
 }

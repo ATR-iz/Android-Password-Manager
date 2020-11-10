@@ -61,7 +61,6 @@ class ItemFragment : Fragment() {
                 }
             }
 
-
             return binding.root
         } else {
             return binding.root

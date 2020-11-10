@@ -19,7 +19,7 @@
         <activity android:name=".view.ListGroupsActivity" />
         <activity android:name=".view.ListItemsActivity" />
         <activity android:name=".view.ItemActivity" />
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
