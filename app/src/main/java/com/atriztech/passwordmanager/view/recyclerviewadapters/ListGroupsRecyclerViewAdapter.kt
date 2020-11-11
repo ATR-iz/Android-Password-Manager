@@ -13,13 +13,14 @@ import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.model.Dir
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import java.util.*
+import javax.inject.Inject
 
 interface ListGroupsDelegate{
     fun OpenGroup(itemGroup: GroupEntity)
     fun EditGroup(itemGroup: GroupEntity)
 }
 
-class ListGroupsRecyclerViewAdapter: RecyclerView.Adapter<ListGroupsRecyclerViewAdapter.ViewHolder>() {
+class ListGroupsRecyclerViewAdapter @Inject constructor(): RecyclerView.Adapter<ListGroupsRecyclerViewAdapter.ViewHolder>() {
     val listData: MutableList<GroupEntity> = LinkedList()
     private var delegate: ListGroupsDelegate? = null
 

@@ -1,4 +1,4 @@
-#Kotlin #RXJava #MVVM #DataBinding #Room
+#Kotlin #SingleActivity #Dagger2 #RXJava #MVVM #DataBinding #Room 
 
 Приложение для Android.
 

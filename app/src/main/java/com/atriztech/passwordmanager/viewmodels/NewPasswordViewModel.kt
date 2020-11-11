@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.viewmodel
+package com.atriztech.passwordmanager.viewmodels
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
@@ -7,8 +7,9 @@ import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.model.entity.ItemEntity
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class NewPasswordViewModel: ViewModel() {
+class NewPasswordViewModel @Inject constructor(): ViewModel() {
     var password = ObservableField<String>("")
     var password_confirm = ObservableField<String>("")
     var key: String = "jksfhjhkjHFKJDSALH234DSKJFH234RKSDF"
