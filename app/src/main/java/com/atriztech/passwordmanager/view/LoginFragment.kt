@@ -8,14 +8,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.LoginFragmentBinding
 import com.atriztech.passwordmanager.viewmodels.LoginViewModel
+import javax.inject.Inject
 
-class LoginFragment : Fragment() {
+class LoginFragment: Fragment() {
     private lateinit var binding: LoginFragmentBinding
-    private lateinit var viewModel: LoginViewModel
     private var passKey = ""
+
+    @Inject
+    lateinit var viewModel: LoginViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,9 +28,10 @@ class LoginFragment : Fragment() {
         if (!retainInstance ) {
             retainInstance = true
 
+            App.component()!!.inject(this)
+
             passKey = requireArguments().getString("pass_key")!!
 
-            viewModel = LoginViewModel()
             binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false);
             binding.viewModel = viewModel
             binding.fragment = this

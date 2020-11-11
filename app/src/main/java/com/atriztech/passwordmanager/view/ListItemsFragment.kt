@@ -10,7 +10,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
+import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ListItemsFragmentBinding
 import com.atriztech.passwordmanager.model.database.GroupWithItemDB
@@ -19,12 +19,20 @@ import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
 import com.atriztech.passwordmanager.view.recyclerviewadapters.ListItemsDelegate
 import com.atriztech.passwordmanager.view.recyclerviewadapters.ListItemsRecyclerViewAdapter
 import com.atriztech.passwordmanager.viewmodels.ListItemsViewModel
+import javax.inject.Inject
 
 class ListItemsFragment : Fragment() {
     private lateinit var binding: ListItemsFragmentBinding
-    private lateinit var viewModel: ListItemsViewModel
-    private val recyclerView = ListItemsRecyclerViewAdapter()
     private lateinit var group: GroupEntity
+
+    @Inject
+    lateinit var viewModel: ListItemsViewModel
+
+    @Inject
+    lateinit var recyclerView: ListItemsRecyclerViewAdapter
+
+    @Inject
+    lateinit var db: GroupWithItemDB
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +40,8 @@ class ListItemsFragment : Fragment() {
     ): View? {
         if (!retainInstance ) {
             retainInstance = true
+
+            App.component()!!.inject(this)
 
             setFragmentResultListener("Save") { key, bundle ->
                 saveItem(bundle)
@@ -41,14 +51,10 @@ class ListItemsFragment : Fragment() {
                 deleteItem(bundle)
             }
 
-            val password = requireArguments().getString("password")
             group = requireArguments().getSerializable("group") as GroupEntity
+            viewModel.password = requireArguments().getString("password")!!
 
-            val db = Room.databaseBuilder(this.requireContext(), GroupWithItemDB::class.java, "db").build()
-
-            viewModel = ListItemsViewModel(db, password!!)
-            binding = DataBindingUtil.inflate(inflater,
-                R.layout.list_items_fragment, container, false);
+            binding = DataBindingUtil.inflate(inflater, R.layout.list_items_fragment, container, false);
             binding.viewModel = viewModel
             binding.fragment = this
 

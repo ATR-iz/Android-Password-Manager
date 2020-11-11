@@ -7,17 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
+import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ItemFragmentBinding
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.model.entity.ItemEntity
 import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
 import com.atriztech.passwordmanager.viewmodels.ItemViewModel
+import javax.inject.Inject
 
 class ItemFragment : Fragment() {
     private lateinit var binding: ItemFragmentBinding
-    private lateinit var viewModel: ItemViewModel
     private var code: Int = 0
+
+    @Inject
+    lateinit var viewModel: ItemViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +30,8 @@ class ItemFragment : Fragment() {
         if (!retainInstance ) {
             retainInstance = true
 
-            viewModel = ItemViewModel()
+            App.component()!!.inject(this)
+
             binding = DataBindingUtil.inflate(inflater, R.layout.item_fragment, container, false);
             binding.viewModel = viewModel
             binding.fragment = this

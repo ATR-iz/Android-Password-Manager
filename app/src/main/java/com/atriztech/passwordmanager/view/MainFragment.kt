@@ -8,16 +8,22 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.room.Room
+import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.MainFragmentBinding
 import com.atriztech.passwordmanager.model.Dir
 import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.viewmodels.MainViewModel
+import javax.inject.Inject
 
-class MainFragment : Fragment() {
+class MainFragment: Fragment() {
     private lateinit var binding: MainFragmentBinding
-    private lateinit var viewModel: MainViewModel
+
+    @Inject
+    lateinit var viewModel: MainViewModel
+
+    @Inject
+    lateinit var db: GroupWithItemDB
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,8 +33,9 @@ class MainFragment : Fragment() {
         if (!retainInstance ) {
             retainInstance = true
 
+            App.component()!!.inject(this)
+
             createDirs()
-            viewModel = MainViewModel()
 
             binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
             binding.viewModel = viewModel
@@ -38,8 +45,6 @@ class MainFragment : Fragment() {
                     passKey -> if(passKey == "First") startNewPasswordFragment()
             else startLoginFragment(passKey)
             })
-
-            var db = Room.databaseBuilder(this.requireActivity(), GroupWithItemDB::class.java, "db").build()
 
             viewModel.getTestDataFromDB(db)
         }

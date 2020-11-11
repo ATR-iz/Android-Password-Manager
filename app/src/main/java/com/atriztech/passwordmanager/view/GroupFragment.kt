@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
+import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.GroupFragmentBinding
 import com.atriztech.passwordmanager.model.Dir
@@ -20,11 +21,14 @@ import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.viewmodels.GroupViewModel
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 class GroupFragment : Fragment() {
     private lateinit var binding: GroupFragmentBinding
-    private lateinit var viewModel: GroupViewModel
     private var code: Int = 0
+
+    @Inject
+    lateinit var viewModel: GroupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +37,8 @@ class GroupFragment : Fragment() {
         if (!retainInstance ) {
             retainInstance = true
 
-            viewModel = GroupViewModel()
+            App.component()!!.inject(this)
+
             binding = DataBindingUtil.inflate(inflater, R.layout.group_fragment, container, false);
             binding.viewModel = viewModel
             binding.fragment = this

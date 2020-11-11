@@ -8,15 +8,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
-import androidx.room.Room
+import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.NewPasswordFragmentBinding
 import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.viewmodels.NewPasswordViewModel
+import javax.inject.Inject
 
 class NewPasswordFragment : Fragment() {
     private lateinit var binding: NewPasswordFragmentBinding
-    private lateinit var viewModel: NewPasswordViewModel
+
+    @Inject
+    lateinit var viewModel: NewPasswordViewModel
+
+    @Inject
     lateinit var db: GroupWithItemDB
 
     override fun onCreateView(
@@ -26,9 +31,8 @@ class NewPasswordFragment : Fragment() {
         if (!retainInstance ) {
             retainInstance = true
 
-            db = Room.databaseBuilder(this.requireContext(), GroupWithItemDB::class.java, "db").build()
+            App.component()!!.inject(this)
 
-            viewModel = NewPasswordViewModel()
             binding = DataBindingUtil.inflate(inflater,
                 R.layout.new_password_fragment, container, false);
             binding.viewModel = viewModel

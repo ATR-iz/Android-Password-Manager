@@ -10,10 +10,12 @@ import com.atriztech.passwordmanager.model.entity.ItemEntity
 import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class ListItemsViewModel(var db: GroupWithItemDB, val password: String): ViewModel() {
+class ListItemsViewModel @Inject constructor(var db: GroupWithItemDB): ViewModel() {
     var listItems = MutableLiveData<List<ItemGroupEntity>>()
     var newItem = MutableLiveData<ItemGroupEntity>()
+    var password: String = ""
 
     fun getDataFromDB(group: GroupEntity){
         Observable.fromCallable {

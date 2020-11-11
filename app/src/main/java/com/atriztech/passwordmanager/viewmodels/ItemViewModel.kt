@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.model.entity.ItemEntity
 import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
+import javax.inject.Inject
 
-class ItemViewModel: ViewModel() {
+class ItemViewModel @Inject constructor(): ViewModel() {
     var item = ObservableField<ItemGroupEntity>(ItemGroupEntity(ItemEntity(name = "", password = "", idGroup = 0), GroupEntity(name = "", url = "")))
 //
 //    fun setItem(newItem: ItemGroupEntity, password: String){

@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class MainViewModel(): ViewModel() {
+class MainViewModel @Inject constructor(): ViewModel() {
     var status = MutableLiveData<String>()
 
     fun getTestDataFromDB(db: GroupWithItemDB){

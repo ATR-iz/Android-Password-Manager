@@ -10,7 +10,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
+import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ListGroupsFragmentBinding
 import com.atriztech.passwordmanager.model.Dir
@@ -20,12 +20,20 @@ import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsDelegat
 import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsRecyclerViewAdapter
 import com.atriztech.passwordmanager.viewmodels.ListGroupsViewModel
 import java.io.File
+import javax.inject.Inject
 
-class ListGroupsFragment : Fragment() {
+class ListGroupsFragment: Fragment() {
     private lateinit var binding: ListGroupsFragmentBinding
-    private lateinit var viewModel: ListGroupsViewModel
-    private val recyclerView = ListGroupsRecyclerViewAdapter()
     private var password = ""
+
+    @Inject
+    lateinit var viewModel: ListGroupsViewModel
+
+    @Inject
+    lateinit var recyclerView: ListGroupsRecyclerViewAdapter
+
+    @Inject
+    lateinit var db: GroupWithItemDB
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +41,8 @@ class ListGroupsFragment : Fragment() {
     ): View? {
         if (!retainInstance ) {
             retainInstance = true
+
+            App.component()!!.inject(this)
 
             setFragmentResultListener("Save") { key, bundle ->
                 saveGroup(bundle)
@@ -42,12 +52,10 @@ class ListGroupsFragment : Fragment() {
                 deleteGroup(bundle)
             }
 
-            var db = Room.databaseBuilder(this.requireContext(), GroupWithItemDB::class.java, "db").build()
             password = requireArguments().getString("password")!!
+            viewModel.password = password
 
-            viewModel = ListGroupsViewModel(db, password)
-            binding = DataBindingUtil.inflate(inflater,
-                R.layout.list_groups_fragment, container, false);
+            binding = DataBindingUtil.inflate(inflater, R.layout.list_groups_fragment, container, false);
             binding.viewModel = viewModel
             binding.fragment = this
 

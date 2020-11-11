@@ -3,8 +3,9 @@ package com.atriztech.passwordmanager.viewmodels
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.atriztech.passwordmanager.crypto.Decoding
+import javax.inject.Inject
 
-class LoginViewModel: ViewModel() {
+class LoginViewModel @Inject constructor(): ViewModel() {
     var password = ObservableField<String>("")
     var key = "jksfhjhkjHFKJDSALH234DSKJFH234RKSDF"
 

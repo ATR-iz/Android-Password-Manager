@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
 import java.util.*
+import javax.inject.Inject
 
 interface ListItemsDelegate{
     fun OpenItem(itemGroup: ItemGroupEntity)
     fun EditItem(itemGroup: ItemGroupEntity)
 }
 
-class ListItemsRecyclerViewAdapter: RecyclerView.Adapter<ListItemsRecyclerViewAdapter.ViewHolder>() {
+class ListItemsRecyclerViewAdapter @Inject constructor(): RecyclerView.Adapter<ListItemsRecyclerViewAdapter.ViewHolder>() {
     val listData: MutableList<ItemGroupEntity> = LinkedList()
     private var delegate: ListItemsDelegate? = null
 
