@@ -5,7 +5,11 @@
     <data>
         <variable
             name="viewModel"
-            type="com.atriztech.passwordmanager.viewmodel.LoginViewModel"
+            type="com.atriztech.passwordmanager.viewmodels.LoginViewModel"
+            />
+        <variable
+            name="fragment"
+            type="com.atriztech.passwordmanager.view.LoginFragment"
             />
     </data>
 
@@ -41,7 +45,7 @@
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:text="Confirm"
-                android:onClick="confirmPassword"/>
+                android:onClick="@{(v) -> fragment.confirmPassword(v)}"/>
 
         </LinearLayout>
     </GridLayout>

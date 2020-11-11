@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.atriztech.passwordmanager.view.MainFragment"
+        android:label="main_fragment"
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_main_fragment_to_login_fragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_main_fragment_to_new_password_fragment"
+            app:destination="@id/newPasswordFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.atriztech.passwordmanager.view.LoginFragment"
+        android:label="login_fragment"
+        tools:layout="@layout/login_fragment" >
+        <action
+            android:id="@+id/action_login_fragment_to_list_groups_fragment"
+            app:destination="@id/listGroupsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newPasswordFragment"
+        android:name="com.atriztech.passwordmanager.view.NewPasswordFragment"
+        android:label="new_password_fragment"
+        tools:layout="@layout/new_password_fragment" >
+        <action
+            android:id="@+id/action_new_password_fragment_to_groups_fragment"
+            app:destination="@id/listGroupsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/listGroupsFragment"
+        android:name="com.atriztech.passwordmanager.view.ListGroupsFragment"
+        android:label="list_groups_fragment"
+        tools:layout="@layout/list_groups_fragment" >
+        <action
+            android:id="@+id/action_list_groups_fragment_to_list_items_fragment"
+            app:destination="@id/listItemsFragment" />
+        <action
+            android:id="@+id/action_list_groups_fragment_to_group_fragment"
+            app:destination="@id/groupFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/groupFragment"
+        android:name="com.atriztech.passwordmanager.view.GroupFragment"
+        android:label="group_fragment"
+        tools:layout="@layout/group_fragment" >
+        <action
+            android:id="@+id/action_group_fragment_to_list_groups_fragment"
+            app:destination="@id/listGroupsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/listItemsFragment"
+        android:name="com.atriztech.passwordmanager.view.ListItemsFragment"
+        android:label="list_items_fragment"
+        tools:layout="@layout/list_items_fragment" >
+        <action
+            android:id="@+id/action_list_items_fragment_to_item_fragment"
+            app:destination="@id/itemFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/itemFragment"
+        android:name="com.atriztech.passwordmanager.view.ItemFragment"
+        android:label="item_fragment"
+        tools:layout="@layout/item_fragment" >
+        <action
+            android:id="@+id/action_item_fragment_to_image_fragment"
+            app:destination="@id/imageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/imageFragment"
+        android:name="com.atriztech.passwordmanager.view.ImageFragment"
+        android:label="image_fragment"
+        tools:layout="@layout/image_fragment" >
+        <action
+            android:id="@+id/action_image_fragment_to_item_fragment"
+            app:destination="@id/itemFragment" />
+    </fragment>
+
+</navigation>

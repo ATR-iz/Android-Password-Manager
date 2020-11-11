@@ -4,7 +4,11 @@
     <data>
         <variable
             name="viewModel"
-            type="com.atriztech.passwordmanager.viewmodel.ItemViewModel"
+            type="com.atriztech.passwordmanager.viewmodels.GroupViewModel"
+            />
+        <variable
+            name="fragment"
+            type="com.atriztech.passwordmanager.view.GroupFragment"
             />
     </data>
 
@@ -22,47 +26,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
+                android:text="Select image:" />
+
+            <ImageView
+                android:id="@+id/group_image"
+                android:onClick="@{(v) -> fragment.openPicture(v)}"
+                android:layout_gravity="center"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_baseline_image_24"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
                 android:text="Group:" />
 
             <EditText
-                android:id="@+id/item_group_name"
+                android:id="@+id/group_name_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="200dp"
                 android:gravity="center"
-                android:text="@={viewModel.item.group.name}"
+                android:text="@={viewModel.group.name}"
                 tools:text="mail.ru" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Login:" />
-
-            <EditText
-                android:id="@+id/item_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="200dp"
-                android:gravity="center"
-                android:text="@={viewModel.item.item.name}"
-                tools:text="atriz-tech@mail.ru" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Password:" />
-
-            <EditText
-                android:id="@+id/item_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="200dp"
-                android:gravity="center"
-                android:text="@={viewModel.item.item.password}"
-                tools:text="hfgyrYYRHDKdf34J" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -76,7 +63,7 @@
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:text="Delete"
-                android:onClick="deleteItem"/>
+                android:onClick="@{(v) -> fragment.deleteGroup(v)}"/>
 
             <Button
                 android:id="@+id/save_item"
@@ -84,7 +71,7 @@
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:text="Save"
-                android:onClick="saveItem"/>
+                android:onClick="@{(v) -> fragment.saveGroup(v)}"/>
         </LinearLayout>
     </FrameLayout>
 </layout>
