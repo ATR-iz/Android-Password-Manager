@@ -7,10 +7,10 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(): ViewModel() {
+class MainViewModel @Inject constructor(val db: GroupWithItemDB): ViewModel() {
     var status = MutableLiveData<String>()
 
-    fun getTestDataFromDB(db: GroupWithItemDB){
+    fun getTestDataFromDB(){
         status.postValue("Loading")
         Observable.fromCallable {
 

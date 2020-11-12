@@ -14,7 +14,6 @@ import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ListGroupsFragmentBinding
 import com.atriztech.passwordmanager.model.Dir
-import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsDelegate
 import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsRecyclerViewAdapter
@@ -31,9 +30,6 @@ class ListGroupsFragment: Fragment() {
 
     @Inject
     lateinit var recyclerView: ListGroupsRecyclerViewAdapter
-
-    @Inject
-    lateinit var db: GroupWithItemDB
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

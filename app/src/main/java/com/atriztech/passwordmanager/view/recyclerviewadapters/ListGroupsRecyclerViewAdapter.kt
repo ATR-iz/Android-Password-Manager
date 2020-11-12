@@ -87,8 +87,6 @@ class ListGroupsRecyclerViewAdapter @Inject constructor(): RecyclerView.Adapter<
                 delegate?.EditGroup(itemGroup = model)
                 return@setOnLongClickListener true
             }
-
-
         }
     }
 }

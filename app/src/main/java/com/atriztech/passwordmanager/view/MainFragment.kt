@@ -12,7 +12,6 @@ import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.MainFragmentBinding
 import com.atriztech.passwordmanager.model.Dir
-import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.viewmodels.MainViewModel
 import javax.inject.Inject
 
@@ -21,9 +20,6 @@ class MainFragment: Fragment() {
 
     @Inject
     lateinit var viewModel: MainViewModel
-
-    @Inject
-    lateinit var db: GroupWithItemDB
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +42,9 @@ class MainFragment: Fragment() {
             else startLoginFragment(passKey)
             })
 
-            viewModel.getTestDataFromDB(db)
+            viewModel.getTestDataFromDB()
+        } else {
+            this.requireActivity().finish()
         }
 
         return binding.root
