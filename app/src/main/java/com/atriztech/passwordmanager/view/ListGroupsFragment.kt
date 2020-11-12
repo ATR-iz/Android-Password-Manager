@@ -10,10 +10,10 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.atriztech.file_manager_api.DirApi
 import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ListGroupsFragmentBinding
-import com.atriztech.passwordmanager.model.Dir
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsDelegate
 import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsRecyclerViewAdapter
@@ -30,6 +30,9 @@ class ListGroupsFragment: Fragment() {
 
     @Inject
     lateinit var recyclerView: ListGroupsRecyclerViewAdapter
+
+    @Inject
+    lateinit var dir: DirApi
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,7 +98,7 @@ class ListGroupsFragment: Fragment() {
             val group =  bundle.getSerializable("group") as GroupEntity
             val oldPicturePath =  bundle.getString("old_url") as String
 
-            if(oldPicturePath != "") File(Dir.homeDirOnMemory + "/" + oldPicturePath).delete()
+            if(oldPicturePath != "") File(dir.applicationPath + "/" + oldPicturePath).delete()
 
             group.url = moveImageToOriginalDir(group.url)
 
@@ -108,7 +111,7 @@ class ListGroupsFragment: Fragment() {
         val group =  bundle.getSerializable("group") as GroupEntity
 
         if(group.url != ""){
-            File(Dir.homeDirOnMemory + "/" + group.url).delete()
+            File(dir.applicationPath + "/" + group.url).delete()
         }
 
         viewModel.deleteGroupFromDB(group)
@@ -121,8 +124,8 @@ class ListGroupsFragment: Fragment() {
         if(tmpPath.indexOf("tmp_image") >= 0){
             originalPath = tmpPath.replace("tmp_image", "image")
 
-            File(Dir.homeDirOnMemory + "/" + tmpPath).let { sourceFile ->
-                sourceFile.copyTo(File(Dir.homeDirOnMemory + "/" + originalPath))
+            File(dir.applicationPath + "/" + tmpPath).let { sourceFile ->
+                sourceFile.copyTo(File(dir.applicationPath + "/" + originalPath))
                 sourceFile.delete()
             }
         }

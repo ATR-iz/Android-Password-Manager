@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.atriztech.crypto_api.CryptoApi
 import com.atriztech.crypto_impl.CryptoImpl
+import com.atriztech.file_manager_api.DirApi
+import com.atriztech.file_manager_impl.DirImpl
 import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import dagger.Module
 import dagger.Provides
@@ -28,5 +30,11 @@ class AppModule(private val app: App) {
     @Singleton
     protected fun provideCrypto(): CryptoApi {
         return CryptoImpl()
+    }
+
+    @Provides
+    @Singleton
+    protected fun provideDir(): DirApi {
+        return DirImpl()
     }
 }

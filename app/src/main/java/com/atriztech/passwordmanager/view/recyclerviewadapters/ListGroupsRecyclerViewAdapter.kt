@@ -1,16 +1,14 @@
 package com.atriztech.passwordmanager.view.recyclerviewadapters
 
-import android.graphics.Paint
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.LAYER_TYPE_HARDWARE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.atriztech.file_manager_api.DirApi
 import com.atriztech.passwordmanager.R
-import com.atriztech.passwordmanager.model.Dir
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import java.util.*
 import javax.inject.Inject
@@ -20,7 +18,7 @@ interface ListGroupsDelegate{
     fun EditGroup(itemGroup: GroupEntity)
 }
 
-class ListGroupsRecyclerViewAdapter @Inject constructor(): RecyclerView.Adapter<ListGroupsRecyclerViewAdapter.ViewHolder>() {
+class ListGroupsRecyclerViewAdapter @Inject constructor(val dir: DirApi): RecyclerView.Adapter<ListGroupsRecyclerViewAdapter.ViewHolder>() {
     val listData: MutableList<GroupEntity> = LinkedList()
     private var delegate: ListGroupsDelegate? = null
 
@@ -60,7 +58,7 @@ class ListGroupsRecyclerViewAdapter @Inject constructor(): RecyclerView.Adapter<
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(itemGroupView = LayoutInflater.from(viewGroup.context).inflate(R.layout.group, viewGroup, false),
-            delegate = delegate)
+            delegate = delegate, applicationPath = dir.applicationPath!!)
     }
 
     override fun getItemCount(): Int {
@@ -71,13 +69,13 @@ class ListGroupsRecyclerViewAdapter @Inject constructor(): RecyclerView.Adapter<
         viewHolder.bind(model = listData[position])
     }
 
-    class ViewHolder(itemGroupView: View, val delegate: ListGroupsDelegate?): RecyclerView.ViewHolder(itemGroupView){
+    class ViewHolder(itemGroupView: View, val delegate: ListGroupsDelegate?, val applicationPath: String): RecyclerView.ViewHolder(itemGroupView){
         private val txtGroup: TextView = itemGroupView.findViewById(R.id.group_name)
         private val imgImage: ImageView = itemView.findViewById(R.id.group_image)
 
         fun bind(model: GroupEntity){
             txtGroup.text = model.name
-            imgImage.setImageURI(Uri.parse(Dir.homeDirOnMemory + "/" + model.url))
+            imgImage.setImageURI(Uri.parse(applicationPath + "/" + model.url))
 
             itemView.setOnClickListener {
                 delegate?.OpenGroup(itemGroup = model)

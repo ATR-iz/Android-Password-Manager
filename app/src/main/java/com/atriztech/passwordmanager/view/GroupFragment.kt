@@ -12,11 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResult
+import com.atriztech.file_manager_api.DirApi
+import com.atriztech.image_api.ImageApi
 import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.GroupFragmentBinding
-import com.atriztech.passwordmanager.model.Dir
-import com.atriztech.passwordmanager.model.ImageFileCreator
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.viewmodels.GroupViewModel
 import io.reactivex.Observable
@@ -29,6 +29,12 @@ class GroupFragment : Fragment() {
 
     @Inject
     lateinit var viewModel: GroupViewModel
+
+    @Inject
+    lateinit var dir: DirApi
+
+    @Inject
+    lateinit var image: ImageApi
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +56,7 @@ class GroupFragment : Fragment() {
                 var group = requireArguments().getSerializable("group") as GroupEntity
                 viewModel.group.set(group)
                 binding.deleteItem.visibility = View.VISIBLE
-                binding.groupImage.setImageURI(Uri.parse(Dir.homeDirOnMemory + "/" +  viewModel.group.get()!!.url))
+                binding.groupImage.setImageURI(Uri.parse(dir.applicationPath + "/" +  viewModel.group.get()!!.url))
             }
         }
 
@@ -94,14 +100,14 @@ class GroupFragment : Fragment() {
                 Observable.fromCallable {
 
                     val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.requireActivity().contentResolver, data?.data)
-                    val shortPath = ImageFileCreator.createImageCache(bitmap)
+                    val shortPath = image.createImageCache(bitmap, dir.applicationPath!!)
 
                     val group = viewModel.group.get()!!
                     viewModel.old_url = group.url
                     group.url = shortPath
 
                     viewModel.group.set(group)
-                    binding.groupImage.setImageURI(Uri.parse(Dir.homeDirOnMemory + "/" + group.url))
+                    binding.groupImage.setImageURI(Uri.parse(dir.applicationPath + "/" + group.url))
 
                 }.observeOn(Schedulers.computation())
                     .subscribe()
