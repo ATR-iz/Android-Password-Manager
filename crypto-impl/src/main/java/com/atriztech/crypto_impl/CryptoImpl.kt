@@ -24,11 +24,11 @@ class CryptoImpl: CryptoApi {
         cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec)
 
         val decodedValue = Base64.decode(passKey, Base64.DEFAULT)
-        var decryptedValue = ""
-        try {
-            decryptedValue = String(cipher.doFinal(decodedValue))
+
+        val decryptedValue: String = try {
+            String(cipher.doFinal(decodedValue))
         } catch (e: BadPaddingException){
-            decryptedValue = "error"
+            "error"
         }
 
         return decryptedValue

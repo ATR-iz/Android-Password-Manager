@@ -43,11 +43,11 @@ class ListGroupsFragment: Fragment() {
 
             App.component()!!.inject(this)
 
-            setFragmentResultListener("Save") { key, bundle ->
+            setFragmentResultListener("Save") { _, bundle ->
                 saveGroup(bundle)
             }
 
-            setFragmentResultListener("Delete") { key, bundle ->
+            setFragmentResultListener("Delete") { _, bundle ->
                 deleteGroup(bundle)
             }
 

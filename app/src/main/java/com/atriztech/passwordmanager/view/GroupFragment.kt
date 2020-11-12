@@ -49,7 +49,7 @@ class GroupFragment : Fragment() {
             binding.viewModel = viewModel
             binding.fragment = this
 
-            code = requireArguments().getInt("code")!!
+            code = requireArguments().getInt("code")
             if(code == 1){
                 binding.deleteItem.visibility = View.INVISIBLE
             } else if(code == 2){
@@ -94,7 +94,7 @@ class GroupFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+        //super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1){
             if (resultCode == Activity.RESULT_OK){
                 Observable.fromCallable {

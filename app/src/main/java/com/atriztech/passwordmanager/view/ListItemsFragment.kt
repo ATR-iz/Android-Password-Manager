@@ -39,11 +39,11 @@ class ListItemsFragment : Fragment() {
 
             App.component()!!.inject(this)
 
-            setFragmentResultListener("Save") { key, bundle ->
+            setFragmentResultListener("Save") { _, bundle ->
                 saveItem(bundle)
             }
 
-            setFragmentResultListener("Delete") { key, bundle ->
+            setFragmentResultListener("Delete") { _, bundle ->
                 deleteItem(bundle)
             }
 
