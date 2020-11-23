@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ListItemsFragmentBinding
-import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
 import com.atriztech.passwordmanager.view.recyclerviewadapters.ListItemsDelegate
@@ -31,9 +30,6 @@ class ListItemsFragment : Fragment() {
     @Inject
     lateinit var recyclerView: ListItemsRecyclerViewAdapter
 
-    @Inject
-    lateinit var db: GroupWithItemDB
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,11 +39,11 @@ class ListItemsFragment : Fragment() {
 
             App.component()!!.inject(this)
 
-            setFragmentResultListener("Save") { key, bundle ->
+            setFragmentResultListener("Save") { _, bundle ->
                 saveItem(bundle)
             }
 
-            setFragmentResultListener("Delete") { key, bundle ->
+            setFragmentResultListener("Delete") { _, bundle ->
                 deleteItem(bundle)
             }
 

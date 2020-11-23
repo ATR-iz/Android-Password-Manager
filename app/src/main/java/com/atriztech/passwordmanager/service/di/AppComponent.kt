@@ -1,6 +1,5 @@
 package com.atriztech.passwordmanager.service.di
 
-import com.atriztech.passwordmanager.service.di.DaggerAppComponent
 import com.atriztech.passwordmanager.MainActivity
 import com.atriztech.passwordmanager.view.*
 import dagger.Component

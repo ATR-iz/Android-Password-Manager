@@ -1,2 +1,8 @@
+include ':image-impl'
+include ':image-api'
+include ':file-manager-impl'
+include ':file-manager-api'
+include ':crypto-impl'
+include ':crypto-api'
 include ':app'
 rootProject.name = "Password Manager"

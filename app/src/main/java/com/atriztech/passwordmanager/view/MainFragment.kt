@@ -8,11 +8,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.atriztech.file_manager_api.DirApi
 import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.MainFragmentBinding
-import com.atriztech.passwordmanager.model.Dir
-import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.viewmodels.MainViewModel
 import javax.inject.Inject
 
@@ -23,7 +22,7 @@ class MainFragment: Fragment() {
     lateinit var viewModel: MainViewModel
 
     @Inject
-    lateinit var db: GroupWithItemDB
+    lateinit var dir: DirApi
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +45,9 @@ class MainFragment: Fragment() {
             else startLoginFragment(passKey)
             })
 
-            viewModel.getTestDataFromDB(db)
+            viewModel.getTestDataFromDB()
+        } else {
+            this.requireActivity().finish()
         }
 
         return binding.root
@@ -63,8 +64,8 @@ class MainFragment: Fragment() {
     }
 
     private fun createDirs(){
-        Dir.homeDirOnMemory = requireActivity().filesDir.absoluteFile.toString()
-        Dir.createDir(Dir.homeDirOnMemory + "/image", false)
-        Dir.createDir(Dir.homeDirOnMemory + "/tmp_image", true)
+        dir.applicationPath = requireActivity().filesDir.absoluteFile.toString()
+        dir.createDir(dir.applicationPath + "/image", false)
+        dir.createDir(dir.applicationPath + "/tmp_image", true)
     }
 }
