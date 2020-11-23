@@ -12,6 +12,12 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/crypto-api" />
+            <option value="$PROJECT_DIR$/crypto-impl" />
+            <option value="$PROJECT_DIR$/file-manager-api" />
+            <option value="$PROJECT_DIR$/file-manager-impl" />
+            <option value="$PROJECT_DIR$/image-api" />
+            <option value="$PROJECT_DIR$/image-impl" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

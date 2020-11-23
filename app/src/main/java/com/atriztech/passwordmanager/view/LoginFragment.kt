@@ -35,11 +35,11 @@ class LoginFragment: Fragment() {
             binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false);
             binding.viewModel = viewModel
             binding.fragment = this
-
-            return binding.root
         } else {
-            return binding.root
+            this.requireActivity().finish()
         }
+
+        return binding.root
     }
 
     fun confirmPassword(view: View){

@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.NewPasswordFragmentBinding
-import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.viewmodels.NewPasswordViewModel
 import javax.inject.Inject
 
@@ -20,9 +19,6 @@ class NewPasswordFragment : Fragment() {
 
     @Inject
     lateinit var viewModel: NewPasswordViewModel
-
-    @Inject
-    lateinit var db: GroupWithItemDB
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,17 +33,17 @@ class NewPasswordFragment : Fragment() {
                 R.layout.new_password_fragment, container, false);
             binding.viewModel = viewModel
             binding.fragment = this
-
-            return binding.root
         } else {
-            return binding.root
+            this.requireActivity().finish()
         }
+
+        return binding.root
     }
 
     fun confirmPassword(view: View){
         var status = viewModel.comparePassword()
         if(status== "ok"){
-            viewModel.addNewKeyToDB(db)
+            viewModel.addNewKeyToDB()
             startListGroupsActivity(viewModel.password.get()!!)
         } else if (status == "short") {
             Toast.makeText(this.requireContext(), "Пароль слишком короткий. Минимальная длинна 4 символа.", Toast.LENGTH_SHORT).show()

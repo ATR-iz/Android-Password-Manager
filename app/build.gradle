@@ -66,4 +66,13 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha04'
 
-}
+    implementation project(":crypto-api")
+    implementation project(":crypto-impl")
+
+    implementation project(":file-manager-api")
+    implementation project(":file-manager-impl")
+
+    implementation project(":image-api")
+    implementation project(":image-impl")
+
+ }
