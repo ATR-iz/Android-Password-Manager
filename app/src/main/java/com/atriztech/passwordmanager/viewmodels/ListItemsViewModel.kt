@@ -36,31 +36,6 @@ class ListItemsViewModel @Inject constructor(var db: GroupWithItemDB, val crypto
 
     fun addItemToDB(itemGroup: ItemGroupEntity){
         GlobalScope.launch {
-
-            //ГОВНОКОД!!!!!!!!!
-            /*
-            var tmpItemGroup = ItemGroupEntity(ItemEntity("","", 0), GroupEntity("", ""))
-
-            tmpItemGroup.item.id = itemGroup.item.id
-            tmpItemGroup.item.idGroup = itemGroup.item.idGroup
-            tmpItemGroup.group.id = itemGroup.group.id
-            tmpItemGroup.item.name = crypto.encode(password, itemGroup.item.name)
-            tmpItemGroup.item.password = crypto.encode(password, itemGroup.item.password!!)
-            tmpItemGroup.group.name = crypto.encode(password, itemGroup.group.name)
-            tmpItemGroup.group.url = crypto.encode(password, itemGroup.group.url)
-
-            var id = db.itemDao().insert(tmpItemGroup)
-            tmpItemGroup = db.itemDao().getItemGroup(id)
-
-            tmpItemGroup.item.name = crypto.decode(password, tmpItemGroup.item.name)
-            tmpItemGroup.item.password = crypto.decode(password, tmpItemGroup.item.password!!)
-            tmpItemGroup.group.name = crypto.decode(password, tmpItemGroup.group.name)
-            tmpItemGroup.group.url = crypto.decode(password, tmpItemGroup.group.url)
-
-            newItem.postValue(tmpItemGroup)
-
-             */
-
             itemGroup.item.name = crypto.encode(password, itemGroup.item.name)
             itemGroup.item.password = crypto.encode(password, itemGroup.item.password!!)
             itemGroup.group.name = crypto.encode(password, itemGroup.group.name)
@@ -69,12 +44,16 @@ class ListItemsViewModel @Inject constructor(var db: GroupWithItemDB, val crypto
             val id = db.itemDao().insert(itemGroup)
             val tmpItemGroup = db.itemDao().getItemGroup(id)
 
-            tmpItemGroup.item.name = crypto.decode(password, tmpItemGroup.item.name)
-            tmpItemGroup.item.password = crypto.decode(password, tmpItemGroup.item.password!!)
-            tmpItemGroup.group.name = crypto.decode(password, tmpItemGroup.group.name)
-            tmpItemGroup.group.url = crypto.decode(password, tmpItemGroup.group.url)
+            itemGroup.item.id = tmpItemGroup.item.id
+            itemGroup.item.idGroup = tmpItemGroup.item.idGroup
+            itemGroup.group.id = tmpItemGroup.group.id
 
-            newItem.postValue(tmpItemGroup)
+            itemGroup.item.name = crypto.decode(password, itemGroup.item.name)
+            itemGroup.item.password = crypto.decode(password, itemGroup.item.password!!)
+            itemGroup.group.name = crypto.decode(password, itemGroup.group.name)
+            itemGroup.group.url = crypto.decode(password, itemGroup.group.url)
+
+            newItem.postValue(itemGroup)
         }
     }
 

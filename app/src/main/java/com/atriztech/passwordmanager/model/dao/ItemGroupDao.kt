@@ -9,7 +9,6 @@ import com.atriztech.passwordmanager.model.entity.GroupEntity
 interface ItemGroupDao {
     @Transaction
     fun insert(itemGroupEntity: ItemGroupEntity): Long{
-        val test = getGroups()
         val findGroups = getGroups().filter { group -> group.name == (itemGroupEntity.group.name) }
 
         when (findGroups.size){
