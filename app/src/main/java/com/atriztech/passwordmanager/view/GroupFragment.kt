@@ -19,8 +19,7 @@ import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.GroupFragmentBinding
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.viewmodels.GroupViewModel
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class GroupFragment : Fragment() {
@@ -94,24 +93,24 @@ class GroupFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        //super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1){
             if (resultCode == Activity.RESULT_OK){
-                Observable.fromCallable {
-
-                    val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.requireActivity().contentResolver, data?.data)
-                    val shortPath = image.createImageCache(bitmap, dir.applicationPath!!)
-
-                    val group = viewModel.group.get()!!
-                    viewModel.old_url = group.url
-                    group.url = shortPath
-
-                    viewModel.group.set(group)
-                    binding.groupImage.setImageURI(Uri.parse(dir.applicationPath + "/" + group.url))
-
-                }.observeOn(Schedulers.computation())
-                    .subscribe()
+                createImageCacheAndReplaceImagePath(data)
             }
+        }
+    }
+
+    private fun createImageCacheAndReplaceImagePath(data: Intent?){
+        GlobalScope.launch(Dispatchers.Main) {
+            val bitmap: Bitmap = async { MediaStore.Images.Media.getBitmap(activity?.contentResolver, data?.data) }.await()
+            val shortPath = async { image.createImageCache(bitmap, dir.applicationPath!!) }.await()
+
+            val group = viewModel.group.get()!!
+            viewModel.old_url = group.url
+            group.url = shortPath
+
+            viewModel.group.set(group)
+            binding.groupImage.setImageURI(Uri.parse(dir.applicationPath + "/" + group.url))
         }
     }
 }

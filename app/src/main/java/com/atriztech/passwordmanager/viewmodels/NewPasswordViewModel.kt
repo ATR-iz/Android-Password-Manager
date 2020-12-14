@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.atriztech.crypto_api.CryptoApi
 import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.model.entity.ItemEntity
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class NewPasswordViewModel @Inject constructor(val db: GroupWithItemDB, val crypto: CryptoApi): ViewModel() {
@@ -25,14 +25,13 @@ class NewPasswordViewModel @Inject constructor(val db: GroupWithItemDB, val cryp
     }
 
     fun addNewKeyToDB(){
-        Observable.fromCallable {
+        GlobalScope.launch {
             var passKey = crypto.encode(password.get()!!, key)
 
             var item = ItemEntity(name = "primary_key", password = passKey, idGroup = -1)
             item.id = 1
 
             db.itemDao().insert(item)
-        }.subscribeOn(Schedulers.io())
-            .subscribe()
+        }
     }
 }

@@ -85,14 +85,14 @@ class ListItemsFragment : Fragment() {
 
     fun saveItem(bundle: Bundle){
         val code =  bundle.getInt("code")
+        val item = bundle.getSerializable("item") as ItemGroupEntity
 
-        if (code == 1) {
-            val item = bundle.getSerializable("item") as ItemGroupEntity
-            viewModel.addItemToDB(item)
-        } else if (code == 2) {
-            val item =  bundle.getSerializable("item") as ItemGroupEntity
-            viewModel.updateItemFromDB(item)
-            recyclerView.UpdateItem(item)
+        when (code){
+            1 -> viewModel.addItemToDB(item)
+            2 -> {
+                viewModel.updateItemFromDB(item)
+                recyclerView.UpdateItem(item)
+            }
         }
     }
 
@@ -103,23 +103,29 @@ class ListItemsFragment : Fragment() {
     }
 
     fun addNewItem(view: View){
-        var bundle = Bundle()
-        bundle.putInt("code", 1)
-        bundle.putSerializable("group", group)
+        val bundle = Bundle().apply {
+            putInt("code", 1)
+            putSerializable("group", group)
+        }
+
         this.findNavController().navigate(R.id.action_list_items_fragment_to_item_fragment, bundle)
     }
 
     private fun editItem(itemGroup: ItemGroupEntity){
-        var bundle = Bundle()
-        bundle.putInt("code", 2)
-        bundle.putSerializable("item", itemGroup)
+        val bundle = Bundle().apply {
+            putInt("code", 2)
+            putSerializable("item", itemGroup)
+        }
+
         this.findNavController().navigate(R.id.action_list_items_fragment_to_item_fragment, bundle)
     }
 
     private fun openItem(itemGroup: ItemGroupEntity){
-        var bundle = Bundle()
-        bundle.putInt("code", 3)
-        bundle.putSerializable("item", itemGroup)
+        val bundle = Bundle().apply {
+            putInt("code", 3)
+            putSerializable("item", itemGroup)
+        }
+
         this.findNavController().navigate(R.id.action_list_items_fragment_to_item_fragment, bundle)
     }
 }

@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.atriztech.crypto_api.CryptoApi
 import com.atriztech.passwordmanager.model.database.GroupWithItemDB
 import com.atriztech.passwordmanager.model.entity.GroupEntity
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ListGroupsViewModel @Inject constructor(var db: GroupWithItemDB, val crypto: CryptoApi): ViewModel() {
@@ -15,7 +15,7 @@ class ListGroupsViewModel @Inject constructor(var db: GroupWithItemDB, val crypt
     var password: String = ""
 
     fun getDataFromDB(){
-        Observable.fromCallable {
+        GlobalScope.launch {
             var list = db.itemDao().getGroups()
             for(item in list){
                 item.name = crypto.decode(password, item.name)
@@ -23,12 +23,11 @@ class ListGroupsViewModel @Inject constructor(var db: GroupWithItemDB, val crypt
             }
 
             listGroup.postValue(list)
-        }.subscribeOn(Schedulers.io())
-            .subscribe()
+        }
     }
 
     fun updateGroupToDB(group: GroupEntity){
-        Observable.fromCallable {
+        GlobalScope.launch {
             var tmpGroup = GroupEntity(name = group.name, url = group.url)
             tmpGroup.id = group.id
 
@@ -36,12 +35,11 @@ class ListGroupsViewModel @Inject constructor(var db: GroupWithItemDB, val crypt
             tmpGroup.url = crypto.encode(password, group.url)
 
             db.itemDao().insert(tmpGroup)
-        }.subscribeOn(Schedulers.io())
-            .subscribe()
+        }
     }
 
     fun deleteGroupFromDB(group: GroupEntity){
-        Observable.fromCallable {
+        GlobalScope.launch {
             group.name = crypto.encode(password, group.name)
             group.url = crypto.encode(password, group.url)
 
@@ -52,12 +50,11 @@ class ListGroupsViewModel @Inject constructor(var db: GroupWithItemDB, val crypt
             }
 
             db.itemDao().deleteGroupId(group.id)
-        }.subscribeOn(Schedulers.io())
-            .subscribe()
+        }
     }
 
     fun addGroupToDB(group: GroupEntity){
-        Observable.fromCallable {
+        GlobalScope.launch {
             group.name = crypto.encode(password, group.name)
             group.url = crypto.encode(password, group.url)
 
@@ -68,7 +65,6 @@ class ListGroupsViewModel @Inject constructor(var db: GroupWithItemDB, val crypt
             tmpGroup.url = crypto.decode(password, group.url)
 
             newGroup.postValue(tmpGroup)
-        }.subscribeOn(Schedulers.io())
-            .subscribe()
+        }
     }
 }

@@ -42,13 +42,14 @@ class NewPasswordFragment : Fragment() {
 
     fun confirmPassword(view: View){
         var status = viewModel.comparePassword()
-        if(status== "ok"){
-            viewModel.addNewKeyToDB()
-            startListGroupsActivity(viewModel.password.get()!!)
-        } else if (status == "short") {
-            Toast.makeText(this.requireContext(), "Пароль слишком короткий. Минимальная длинна 4 символа.", Toast.LENGTH_SHORT).show()
-        } else if (status == "not equal"){
-            Toast.makeText(this.requireContext(), "Пароли не совпадают", Toast.LENGTH_SHORT).show()
+
+        when (status) {
+            "ok" -> {
+                viewModel.addNewKeyToDB()
+                startListGroupsActivity(viewModel.password.get()!!)
+            }
+            "short" -> Toast.makeText(this.requireContext(), "Пароль слишком короткий. Минимальная длинна 4 символа.", Toast.LENGTH_SHORT).show()
+            "not equal" -> Toast.makeText(this.requireContext(), "Пароли не совпадают", Toast.LENGTH_SHORT).show()
         }
     }
 

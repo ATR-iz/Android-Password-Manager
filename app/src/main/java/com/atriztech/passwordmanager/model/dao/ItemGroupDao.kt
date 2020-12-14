@@ -9,21 +9,12 @@ import com.atriztech.passwordmanager.model.entity.GroupEntity
 interface ItemGroupDao {
     @Transaction
     fun insert(itemGroupEntity: ItemGroupEntity): Long{
-        var allGroups = getGroups()
+        val test = getGroups()
+        val findGroups = getGroups().filter { group -> group.name == (itemGroupEntity.group.name) }
 
-        var id: Long = -1
-
-        for (group in allGroups){
-            if (group.name == itemGroupEntity.group.name){
-                id = group.id
-                break
-            }
-        }
-
-        if (id < 0){
-            itemGroupEntity.item.idGroup = insert(itemGroupEntity.group)
-        } else {
-            itemGroupEntity.item.idGroup = id
+        when (findGroups.size){
+            0 -> itemGroupEntity.item.idGroup = insert(itemGroupEntity.group)
+            else -> itemGroupEntity.item.idGroup = findGroups[0].id
         }
 
         return insert(itemGroupEntity.item)
