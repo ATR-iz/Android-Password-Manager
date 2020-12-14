@@ -5,7 +5,7 @@
 > Kotlin  
 > SingleActivity  
 > Dagger2  
-> RXJava  
+> Kotlin Coroutines  
 > MVVM  
 > DataBinding  
 > Room 
