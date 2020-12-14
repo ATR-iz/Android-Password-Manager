@@ -1,8 +1,16 @@
-#Kotlin #SingleActivity #Dagger2 #RXJava #MVVM #DataBinding #Room 
+# Password Manager
+Приложение написано под android. Предназначено для хранения пары логин-пароль в зашифрованном виде.
 
-Приложение для Android.
+Используемый стек технологий
+> Kotlin  
+> SingleActivity  
+> Dagger2  
+> RXJava  
+> MVVM  
+> DataBinding  
+> Room 
 
-Хранение пары логин-пароль в зашифрованном виде.
+Screenshots:
 
 !["Создания нового пароля"](https://github.com/ATRiz-Tech/Android-Password-Manager/blob/master/Image/1.png) !["Разблокировка"](https://github.com/ATRiz-Tech/Android-Password-Manager/blob/master/Image/2.png)
 !["Список созданных групп"](https://github.com/ATRiz-Tech/Android-Password-Manager/blob/master/Image/3.png) !["Создание новой группы"](https://github.com/ATRiz-Tech/Android-Password-Manager/blob/master/Image/4.png)
