@@ -5,11 +5,11 @@
     <data>
         <variable
             name="viewModel"
-            type="com.atriztech.passwordmanager.viewmodels.MainViewModel"
+            type="com.atriztech.passwordmanager.view.fragmentmain.MainViewModel"
             />
         <variable
             name="fragment"
-            type="com.atriztech.passwordmanager.view.MainFragment"
+            type="com.atriztech.passwordmanager.view.fragmentmain.MainFragment"
             />
     </data>
 

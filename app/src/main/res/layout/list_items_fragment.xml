@@ -5,11 +5,11 @@
     <data>
         <variable
             name="viewModel"
-            type="com.atriztech.passwordmanager.viewmodels.ListItemsViewModel"
+            type="com.atriztech.passwordmanager.view.fragmentlistitems.ListItemsViewModel"
             />
         <variable
             name="fragment"
-            type="com.atriztech.passwordmanager.view.ListItemsFragment"
+            type="com.atriztech.passwordmanager.view.fragmentlistitems.ListItemsFragment"
             />
     </data>
 
@@ -36,6 +36,6 @@
             android:layout_gravity="right|bottom"
             android:layout_margin="5dp"
             android:text="add"
-            android:onClick="@{(v) -> fragment.addNewItem(v)}"/>
+            android:onClick="@{() -> fragment.addNewItem()}"/>
     </FrameLayout>
 </layout>

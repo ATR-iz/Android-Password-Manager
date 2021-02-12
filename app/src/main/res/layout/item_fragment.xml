@@ -4,11 +4,11 @@
     <data>
         <variable
             name="viewModel"
-            type="com.atriztech.passwordmanager.viewmodels.ItemViewModel"
+            type="com.atriztech.passwordmanager.view.fragmentitem.ItemViewModel"
             />
         <variable
             name="fragment"
-            type="com.atriztech.passwordmanager.view.ItemFragment"
+            type="com.atriztech.passwordmanager.view.fragmentitem.ItemFragment"
             />
     </data>
 
@@ -80,7 +80,7 @@
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:text="Delete"
-                android:onClick="@{(v) -> fragment.deleteItem(v)}"/>
+                android:onClick="@{() -> fragment.deleteItem()}"/>
 
             <Button
                 android:id="@+id/save_item"
@@ -88,7 +88,7 @@
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:text="Save"
-                android:onClick="@{(v) -> fragment.saveItem(v)}"/>
+                android:onClick="@{() -> fragment.saveItem()}"/>
         </LinearLayout>
     </FrameLayout>
 </layout>

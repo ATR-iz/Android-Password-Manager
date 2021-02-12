@@ -4,11 +4,11 @@
     <data>
         <variable
             name="viewModel"
-            type="com.atriztech.passwordmanager.viewmodels.ListGroupsViewModel"
+            type="com.atriztech.passwordmanager.view.fragmentlistgroups.ListGroupsViewModel"
             />
         <variable
             name="fragment"
-            type="com.atriztech.passwordmanager.view.ListGroupsFragment" />
+            type="com.atriztech.passwordmanager.view.fragmentlistgroups.ListGroupsFragment" />
     </data>
 
     <FrameLayout
@@ -34,7 +34,7 @@
             android:layout_gravity="right|bottom"
             android:layout_margin="5dp"
             android:text="add"
-            android:onClick="@{(v) -> fragment.addNewGroup(v)}"/>
+            android:onClick="@{() -> fragment.addNewGroup()}"/>
 
     </FrameLayout>
 

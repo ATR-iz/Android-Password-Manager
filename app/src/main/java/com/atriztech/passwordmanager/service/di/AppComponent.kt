@@ -1,7 +1,13 @@
 package com.atriztech.passwordmanager.service.di
 
-import com.atriztech.passwordmanager.MainActivity
-import com.atriztech.passwordmanager.view.*
+import com.atriztech.passwordmanager.view.MainActivity
+import com.atriztech.passwordmanager.view.fragmentgroup.GroupFragment
+import com.atriztech.passwordmanager.view.fragmentitem.ItemFragment
+import com.atriztech.passwordmanager.view.fragmentlistgroups.ListGroupsFragment
+import com.atriztech.passwordmanager.view.fragmentlistitems.ListItemsFragment
+import com.atriztech.passwordmanager.view.fragmentlogin.LoginFragment
+import com.atriztech.passwordmanager.view.fragmentmain.MainFragment
+import com.atriztech.passwordmanager.view.fragmentnewpassword.NewPasswordFragment
 import dagger.Component
 import dagger.android.AndroidInjector
 import javax.inject.Singleton
