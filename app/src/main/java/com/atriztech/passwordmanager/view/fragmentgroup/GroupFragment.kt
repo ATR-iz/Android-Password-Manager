@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.view
+package com.atriztech.passwordmanager.view.fragmentgroup
 
 import android.app.Activity
 import android.content.Intent
@@ -18,7 +18,6 @@ import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.GroupFragmentBinding
 import com.atriztech.passwordmanager.model.entity.GroupEntity
-import com.atriztech.passwordmanager.viewmodels.GroupViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -39,9 +38,7 @@ class GroupFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (!retainInstance ) {
-            retainInstance = true
-
+        if (!this::binding.isInitialized ) {
             App.component()!!.inject(this)
 
             binding = DataBindingUtil.inflate(inflater, R.layout.group_fragment, container, false);
@@ -62,7 +59,7 @@ class GroupFragment : Fragment() {
         return binding.root
     }
 
-    fun deleteGroup(view: View){
+    fun deleteGroup(){
         var bundle = Bundle()
         bundle.putInt("code", code)
         bundle.putSerializable("group", viewModel.group.get())
@@ -72,7 +69,7 @@ class GroupFragment : Fragment() {
         //setResult(ActivityPostCode.DELETE_ITEM, newIntent)
     }
 
-    fun saveGroup(view: View){
+    fun saveGroup(){
         var bundle = Bundle()
         bundle.putInt("code", code)
         bundle.putSerializable("group", viewModel.group.get())
@@ -84,7 +81,7 @@ class GroupFragment : Fragment() {
         //setResult(ActivityPostCode.SAVE_ITEM, newIntent)
     }
 
-    fun openPicture(view: View){
+    fun openPicture(){
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT

@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.view
+package com.atriztech.passwordmanager.view.fragmentlistitems
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,9 +15,8 @@ import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ListItemsFragmentBinding
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
-import com.atriztech.passwordmanager.view.recyclerviewadapters.ListItemsDelegate
-import com.atriztech.passwordmanager.view.recyclerviewadapters.ListItemsRecyclerViewAdapter
-import com.atriztech.passwordmanager.viewmodels.ListItemsViewModel
+import com.atriztech.passwordmanager.view.fragmentlistitems.ListItemsDelegate
+import com.atriztech.passwordmanager.view.fragmentlistitems.ListItemsRecyclerViewAdapter
 import javax.inject.Inject
 
 class ListItemsFragment : Fragment() {
@@ -34,9 +33,7 @@ class ListItemsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (!retainInstance ) {
-            retainInstance = true
-
+        if (!this::binding.isInitialized ) {
             App.component()!!.inject(this)
 
             setFragmentResultListener("Save") { _, bundle ->
@@ -102,7 +99,7 @@ class ListItemsFragment : Fragment() {
         recyclerView.DeleteItem(item)
     }
 
-    fun addNewItem(view: View){
+    fun addNewItem(){
         val bundle = Bundle().apply {
             putInt("code", 1)
             putSerializable("group", group)

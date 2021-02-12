@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.view.recyclerviewadapters
+package com.atriztech.passwordmanager.view.fragmentlistgroups
 
 import android.net.Uri
 import android.view.LayoutInflater

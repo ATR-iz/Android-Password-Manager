@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.view
+package com.atriztech.passwordmanager.view.fragmentmain
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,7 +12,6 @@ import com.atriztech.file_manager_api.DirApi
 import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.MainFragmentBinding
-import com.atriztech.passwordmanager.viewmodels.MainViewModel
 import javax.inject.Inject
 
 class MainFragment: Fragment() {
@@ -27,11 +26,9 @@ class MainFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        if (!retainInstance ) {
-            retainInstance = true
-
+        if (!this::binding.isInitialized ) {
             App.component()!!.inject(this)
 
             createDirs()

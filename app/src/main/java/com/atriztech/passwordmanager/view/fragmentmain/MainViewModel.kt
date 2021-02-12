@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.viewmodels
+package com.atriztech.passwordmanager.view.fragmentmain
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

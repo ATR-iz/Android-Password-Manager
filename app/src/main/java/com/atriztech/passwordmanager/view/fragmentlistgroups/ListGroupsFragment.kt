@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.view
+package com.atriztech.passwordmanager.view.fragmentlistgroups
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,9 +15,8 @@ import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ListGroupsFragmentBinding
 import com.atriztech.passwordmanager.model.entity.GroupEntity
-import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsDelegate
-import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsRecyclerViewAdapter
-import com.atriztech.passwordmanager.viewmodels.ListGroupsViewModel
+import com.atriztech.passwordmanager.view.fragmentlistgroups.ListGroupsDelegate
+import com.atriztech.passwordmanager.view.fragmentlistgroups.ListGroupsRecyclerViewAdapter
 import java.io.File
 import javax.inject.Inject
 
@@ -38,9 +37,7 @@ class ListGroupsFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (!retainInstance ) {
-            retainInstance = true
-
+        if (!this::binding.isInitialized ) {
             App.component()!!.inject(this)
 
             setFragmentResultListener("Save") { _, bundle ->
@@ -140,7 +137,7 @@ class ListGroupsFragment: Fragment() {
         this.findNavController().navigate(R.id.action_list_groups_fragment_to_list_items_fragment, bundle)
     }
 
-    fun addNewGroup(view: View){
+    fun addNewGroup(){
         var bundle = Bundle()
         bundle.putInt("code", 1)
         this.findNavController().navigate(R.id.action_list_groups_fragment_to_group_fragment, bundle)

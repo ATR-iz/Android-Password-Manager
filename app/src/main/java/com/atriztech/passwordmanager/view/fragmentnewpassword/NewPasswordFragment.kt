@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.view
+package com.atriztech.passwordmanager.view.fragmentnewpassword
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.NewPasswordFragmentBinding
-import com.atriztech.passwordmanager.viewmodels.NewPasswordViewModel
 import javax.inject.Inject
 
 class NewPasswordFragment : Fragment() {
@@ -24,9 +23,7 @@ class NewPasswordFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (!retainInstance ) {
-            retainInstance = true
-
+        if (!this::binding.isInitialized ) {
             App.component()!!.inject(this)
 
             binding = DataBindingUtil.inflate(inflater,
@@ -40,7 +37,7 @@ class NewPasswordFragment : Fragment() {
         return binding.root
     }
 
-    fun confirmPassword(view: View){
+    fun confirmPassword(){
         var status = viewModel.comparePassword()
 
         when (status) {

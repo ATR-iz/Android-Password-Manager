@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.viewmodels
+package com.atriztech.passwordmanager.view.fragmentnewpassword
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
