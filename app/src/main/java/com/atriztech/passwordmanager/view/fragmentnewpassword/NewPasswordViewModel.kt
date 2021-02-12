@@ -14,13 +14,13 @@ class NewPasswordViewModel @Inject constructor(val db: GroupWithItemDB, val cryp
     var password_confirm = ObservableField<String>("")
     var key: String = "jksfhjhkjHFKJDSALH234DSKJFH234RKSDF"
 
-    fun comparePassword(): String{
+    fun comparePassword(): PasswordState{
         if (password.get()?.length!! < 4){
-            return "short"
+            return PasswordState.Short()
         } else if (password.get() != password_confirm.get()){
-            return "not equal"
+            return PasswordState.NotEqual()
         } else {
-            return "ok"
+            return PasswordState.Ok()
         }
     }
 
@@ -33,5 +33,11 @@ class NewPasswordViewModel @Inject constructor(val db: GroupWithItemDB, val cryp
 
             db.itemDao().insert(item)
         }
+    }
+
+    sealed class PasswordState{
+        class Ok: PasswordState()
+        class NotEqual: PasswordState()
+        class Short: PasswordState()
     }
 }

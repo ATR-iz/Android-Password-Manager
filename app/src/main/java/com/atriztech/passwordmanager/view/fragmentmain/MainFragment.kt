@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.atriztech.file_manager_api.DirApi
 import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.MainFragmentBinding
 import com.atriztech.passwordmanager.model.DirImage
+import com.atriztech.passwordmanager.view.fragmentlogin.LoginFragment
 import javax.inject.Inject
 
 class MainFragment: Fragment() {
@@ -25,7 +25,6 @@ class MainFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         if (!this::binding.isInitialized ) {
             App.component()!!.inject(this)
 
@@ -48,17 +47,13 @@ class MainFragment: Fragment() {
         return binding.root
     }
 
-    private fun startNewPasswordFragment(){
+    private fun startNewPasswordFragment() =
         findNavController().navigate(R.id.action_main_fragment_to_new_password_fragment, Bundle())
-    }
 
-    private fun startLoginFragment(passKey: String){
-        var bundle = Bundle()
-        bundle.putString("pass_key", passKey)
-        findNavController().navigate(R.id.action_main_fragment_to_login_fragment, bundle)
-    }
+    private fun startLoginFragment(passKey: String) =
+        findNavController().navigate(R.id.action_main_fragment_to_login_fragment, LoginFragment.bundleFor(passKey))
 
-    private fun createDirs(){
+    private fun createDirs() =
         dir.createDir(dir.pathImage, false)
-    }
+
 }

@@ -16,11 +16,31 @@ import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
 import javax.inject.Inject
 
 class ItemFragment : Fragment() {
-    private lateinit var binding: ItemFragmentBinding
-    private var code: Int = 0
 
-    @Inject
-    lateinit var viewModel: ItemViewModel
+    companion object{
+        const val CODE = "code"
+        const val ITEM = "item"
+        const val GROUP = "group"
+        const val SAVE = "save"
+        const val DELETE = "delete"
+
+        fun bundleFor(code: Int, group: GroupEntity): Bundle {
+            return Bundle().apply {
+                putInt(CODE, code)
+                putSerializable(GROUP, group)
+            }
+        }
+
+        fun bundleFor(code: Int, item: ItemGroupEntity): Bundle {
+            return Bundle().apply {
+                putInt(CODE, code)
+                putSerializable(ITEM, item)
+            }
+        }
+    }
+
+    private lateinit var binding: ItemFragmentBinding
+    @Inject lateinit var viewModel: ItemViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,25 +53,25 @@ class ItemFragment : Fragment() {
             binding.viewModel = viewModel
             binding.fragment = this
 
-            code = requireArguments().getInt("code")
+            viewModel.code = requireArguments().getInt(CODE)
 
-            when(code){
+            when(viewModel.code){
                 1 -> {
                     //title = "Create item"
                     binding.deleteItem.visibility = View.INVISIBLE
                     binding.itemGroupName.isEnabled = false
-                    val group = requireArguments().getSerializable("group") as GroupEntity
+                    val group = requireArguments().getSerializable(GROUP) as GroupEntity
                     viewModel.item.set(ItemGroupEntity(ItemEntity(name = "", password = "", idGroup = group.id), group))
                 }
                 2 -> {
                     //title = "Edit item"
                     binding.deleteItem.visibility = View.VISIBLE
-                    val item = requireArguments().getSerializable("item") as ItemGroupEntity
+                    val item = requireArguments().getSerializable(ITEM) as ItemGroupEntity
                     viewModel.item.set(item)
                 }
                 3-> {
                     //title = "View item"
-                    val item = requireArguments().getSerializable("item") as ItemGroupEntity
+                    val item = requireArguments().getSerializable(ITEM) as ItemGroupEntity
                     viewModel.item.set(item)
 
                     binding.deleteItem.visibility = View.INVISIBLE
@@ -70,18 +90,12 @@ class ItemFragment : Fragment() {
     }
 
     fun saveItem(){
-        var bundle = Bundle()
-        bundle.putInt("code", code)
-        bundle.putSerializable("item", viewModel.item.get())
-        setFragmentResult("Save", bundle)
+        setFragmentResult(SAVE, viewModel.createBundleForSave())
         requireActivity().onBackPressed()
     }
 
     fun deleteItem(){
-        var bundle = Bundle()
-        bundle.putInt("code", code)
-        bundle.putSerializable("item", viewModel.item.get())
-        setFragmentResult("Delete", bundle)
+        setFragmentResult(DELETE, viewModel.createBundleForDelete())
         requireActivity().onBackPressed()
     }
 }

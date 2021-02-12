@@ -15,11 +15,25 @@ import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ListItemsFragmentBinding
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
+import com.atriztech.passwordmanager.view.fragmentitem.ItemFragment
 import com.atriztech.passwordmanager.view.fragmentlistitems.ListItemsDelegate
 import com.atriztech.passwordmanager.view.fragmentlistitems.ListItemsRecyclerViewAdapter
 import javax.inject.Inject
 
 class ListItemsFragment : Fragment() {
+
+    companion object{
+        const val GROUP = "group"
+        const val PASSWORD = "password"
+
+        fun bundleFor(group: GroupEntity, password: String): Bundle {
+            return Bundle().apply {
+                putSerializable(GROUP, group)
+                putString(PASSWORD, password)
+            }
+        }
+    }
+
     private lateinit var binding: ListItemsFragmentBinding
     private lateinit var group: GroupEntity
 
@@ -33,16 +47,16 @@ class ListItemsFragment : Fragment() {
         if (!this::binding.isInitialized ) {
             App.component()!!.inject(this)
 
-            setFragmentResultListener("Save") { _, bundle ->
+            setFragmentResultListener(ItemFragment.SAVE) { _, bundle ->
                 saveItem(bundle)
             }
 
-            setFragmentResultListener("Delete") { _, bundle ->
+            setFragmentResultListener(ItemFragment.DELETE) { _, bundle ->
                 deleteItem(bundle)
             }
 
-            group = requireArguments().getSerializable("group") as GroupEntity
-            viewModel.password = requireArguments().getString("password")!!
+            group = requireArguments().getSerializable(GROUP) as GroupEntity
+            viewModel.password = requireArguments().getString(PASSWORD)!!
 
             binding = DataBindingUtil.inflate(inflater, R.layout.list_items_fragment, container, false);
             binding.viewModel = viewModel
@@ -78,8 +92,8 @@ class ListItemsFragment : Fragment() {
     }
 
     fun saveItem(bundle: Bundle){
-        val code =  bundle.getInt("code")
-        val item = bundle.getSerializable("item") as ItemGroupEntity
+        val code =  bundle.getInt(ItemFragment.CODE)
+        val item = bundle.getSerializable(ItemFragment.ITEM) as ItemGroupEntity
 
         when (code){
             1 -> viewModel.addItemToDB(item)
@@ -91,35 +105,18 @@ class ListItemsFragment : Fragment() {
     }
 
     fun deleteItem(bundle: Bundle){
-        val item = bundle.getSerializable("item") as ItemGroupEntity
+        val item = bundle.getSerializable(ItemFragment.ITEM) as ItemGroupEntity
         viewModel.deleteItemFromDB(item)
         recyclerView.DeleteItem(item)
     }
 
-    fun addNewItem(){
-        val bundle = Bundle().apply {
-            putInt("code", 1)
-            putSerializable("group", group)
-        }
+    fun addNewItem() =
+        this.findNavController().navigate(R.id.action_list_items_fragment_to_item_fragment, ItemFragment.bundleFor(1, group))
 
-        this.findNavController().navigate(R.id.action_list_items_fragment_to_item_fragment, bundle)
-    }
+    private fun editItem(itemGroup: ItemGroupEntity) =
+        this.findNavController().navigate(R.id.action_list_items_fragment_to_item_fragment, ItemFragment.bundleFor(2, itemGroup))
 
-    private fun editItem(itemGroup: ItemGroupEntity){
-        val bundle = Bundle().apply {
-            putInt("code", 2)
-            putSerializable("item", itemGroup)
-        }
+    private fun openItem(itemGroup: ItemGroupEntity) =
+        this.findNavController().navigate(R.id.action_list_items_fragment_to_item_fragment, ItemFragment.bundleFor(3, itemGroup))
 
-        this.findNavController().navigate(R.id.action_list_items_fragment_to_item_fragment, bundle)
-    }
-
-    private fun openItem(itemGroup: ItemGroupEntity){
-        val bundle = Bundle().apply {
-            putInt("code", 3)
-            putSerializable("item", itemGroup)
-        }
-
-        this.findNavController().navigate(R.id.action_list_items_fragment_to_item_fragment, bundle)
-    }
 }
