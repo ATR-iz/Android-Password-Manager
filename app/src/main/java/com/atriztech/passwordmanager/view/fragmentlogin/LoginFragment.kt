@@ -17,8 +17,7 @@ class LoginFragment: Fragment() {
     private lateinit var binding: LoginFragmentBinding
     private var passKey = ""
 
-    @Inject
-    lateinit var viewModel: LoginViewModel
+    @Inject lateinit var viewModel: LoginViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

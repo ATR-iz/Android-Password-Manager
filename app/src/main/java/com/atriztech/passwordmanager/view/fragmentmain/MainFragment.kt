@@ -12,16 +12,14 @@ import com.atriztech.file_manager_api.DirApi
 import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.MainFragmentBinding
+import com.atriztech.passwordmanager.model.DirImage
 import javax.inject.Inject
 
 class MainFragment: Fragment() {
     private lateinit var binding: MainFragmentBinding
 
-    @Inject
-    lateinit var viewModel: MainViewModel
-
-    @Inject
-    lateinit var dir: DirApi
+    @Inject lateinit var viewModel: MainViewModel
+    @Inject lateinit var dir: DirImage
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +36,8 @@ class MainFragment: Fragment() {
             binding.fragment = this
 
             viewModel.status.observe(this.requireActivity(), Observer {
-                    passKey -> if(passKey == "First") startNewPasswordFragment()
-            else startLoginFragment(passKey)
+                    passKey ->  if(passKey == "First") startNewPasswordFragment()
+                                else startLoginFragment(passKey)
             })
 
             viewModel.getTestDataFromDB()
@@ -61,8 +59,6 @@ class MainFragment: Fragment() {
     }
 
     private fun createDirs(){
-        dir.applicationPath = requireActivity().filesDir.absoluteFile.toString()
-        dir.createDir(dir.applicationPath + "/image", false)
-        dir.createDir(dir.applicationPath + "/tmp_image", true)
+        dir.createDir(dir.pathImage, false)
     }
 }

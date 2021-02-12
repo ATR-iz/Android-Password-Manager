@@ -7,5 +7,6 @@ import javax.inject.Inject
 
 class GroupViewModel @Inject constructor(): ViewModel() {
     var group = ObservableField<GroupEntity>(GroupEntity(name = "", url = ""))
+    var url: String = ""
     var old_url = ""
 }

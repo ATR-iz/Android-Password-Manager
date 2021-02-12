@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.atriztech.file_manager_api.DirApi
 import com.atriztech.passwordmanager.R
+import com.atriztech.passwordmanager.model.DirImage
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import java.util.*
 import javax.inject.Inject
@@ -18,7 +19,7 @@ interface ListGroupsDelegate{
     fun EditGroup(itemGroup: GroupEntity)
 }
 
-class ListGroupsRecyclerViewAdapter @Inject constructor(val dir: DirApi): RecyclerView.Adapter<ListGroupsRecyclerViewAdapter.ViewHolder>() {
+class ListGroupsRecyclerViewAdapter @Inject constructor(val dir: DirImage): RecyclerView.Adapter<ListGroupsRecyclerViewAdapter.ViewHolder>() {
     val listData: MutableList<GroupEntity> = LinkedList()
     private var delegate: ListGroupsDelegate? = null
 
@@ -58,7 +59,7 @@ class ListGroupsRecyclerViewAdapter @Inject constructor(val dir: DirApi): Recycl
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(itemGroupView = LayoutInflater.from(viewGroup.context).inflate(R.layout.group, viewGroup, false),
-            delegate = delegate, applicationPath = dir.applicationPath!!)
+            delegate = delegate, applicationPath = dir.pathImage)
     }
 
     override fun getItemCount(): Int {

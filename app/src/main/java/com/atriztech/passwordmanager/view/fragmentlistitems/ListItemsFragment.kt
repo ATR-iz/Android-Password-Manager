@@ -23,11 +23,8 @@ class ListItemsFragment : Fragment() {
     private lateinit var binding: ListItemsFragmentBinding
     private lateinit var group: GroupEntity
 
-    @Inject
-    lateinit var viewModel: ListItemsViewModel
-
-    @Inject
-    lateinit var recyclerView: ListItemsRecyclerViewAdapter
+    @Inject lateinit var viewModel: ListItemsViewModel
+    @Inject lateinit var recyclerView: ListItemsRecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

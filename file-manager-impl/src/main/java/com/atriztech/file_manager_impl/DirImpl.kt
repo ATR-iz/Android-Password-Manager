@@ -3,9 +3,7 @@ package com.atriztech.file_manager_impl
 import com.atriztech.file_manager_api.DirApi
 import java.io.File
 
-class DirImpl() : DirApi {
-    override var applicationPath: String? = null
-
+open class DirImpl() : DirApi {
     override fun createDir(path: String, ifDirExistsDelete: Boolean): String {
         val file = File(path)
 
