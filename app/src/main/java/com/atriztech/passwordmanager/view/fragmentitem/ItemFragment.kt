@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.view
+package com.atriztech.passwordmanager.view.fragmentitem
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,7 +13,6 @@ import com.atriztech.passwordmanager.databinding.ItemFragmentBinding
 import com.atriztech.passwordmanager.model.entity.GroupEntity
 import com.atriztech.passwordmanager.model.entity.ItemEntity
 import com.atriztech.passwordmanager.model.entity.ItemGroupEntity
-import com.atriztech.passwordmanager.viewmodels.ItemViewModel
 import javax.inject.Inject
 
 class ItemFragment : Fragment() {
@@ -27,9 +26,7 @@ class ItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (!retainInstance ) {
-            retainInstance = true
-
+        if (!this::binding.isInitialized ) {
             App.component()!!.inject(this)
 
             binding = DataBindingUtil.inflate(inflater, R.layout.item_fragment, container, false);
@@ -72,7 +69,7 @@ class ItemFragment : Fragment() {
         }
     }
 
-    fun saveItem(view: View){
+    fun saveItem(){
         var bundle = Bundle()
         bundle.putInt("code", code)
         bundle.putSerializable("item", viewModel.item.get())
@@ -80,7 +77,7 @@ class ItemFragment : Fragment() {
         requireActivity().onBackPressed()
     }
 
-    fun deleteItem(view: View){
+    fun deleteItem(){
         var bundle = Bundle()
         bundle.putInt("code", code)
         bundle.putSerializable("item", viewModel.item.get())

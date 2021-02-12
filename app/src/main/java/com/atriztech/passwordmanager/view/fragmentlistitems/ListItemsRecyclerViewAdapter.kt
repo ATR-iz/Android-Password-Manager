@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.view.recyclerviewadapters
+package com.atriztech.passwordmanager.view.fragmentlistitems
 
 import android.view.LayoutInflater
 import android.view.View

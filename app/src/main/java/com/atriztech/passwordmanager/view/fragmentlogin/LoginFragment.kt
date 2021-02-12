@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.view
+package com.atriztech.passwordmanager.view.fragmentlogin
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,23 +11,19 @@ import androidx.navigation.fragment.findNavController
 import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.LoginFragmentBinding
-import com.atriztech.passwordmanager.viewmodels.LoginViewModel
 import javax.inject.Inject
 
 class LoginFragment: Fragment() {
     private lateinit var binding: LoginFragmentBinding
     private var passKey = ""
 
-    @Inject
-    lateinit var viewModel: LoginViewModel
+    @Inject lateinit var viewModel: LoginViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (!retainInstance ) {
-            retainInstance = true
-
+        if (!this::binding.isInitialized ) {
             App.component()!!.inject(this)
 
             passKey = requireArguments().getString("pass_key")!!
@@ -42,7 +38,7 @@ class LoginFragment: Fragment() {
         return binding.root
     }
 
-    fun confirmPassword(view: View){
+    fun confirmPassword(){
         if (viewModel.checkPassword(passKey)){
             startListItemsActivity()
         } else {
