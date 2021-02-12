@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.view
+package com.atriztech.passwordmanager.view.fragmentgroup
 
 import android.app.Activity
 import android.content.Intent
@@ -17,8 +17,9 @@ import com.atriztech.image_api.ImageApi
 import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.GroupFragmentBinding
+import com.atriztech.passwordmanager.model.DirImage
 import com.atriztech.passwordmanager.model.entity.GroupEntity
-import com.atriztech.passwordmanager.viewmodels.GroupViewModel
+import com.atriztech.passwordmanager.view.FragmentState
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -26,22 +27,18 @@ class GroupFragment : Fragment() {
     private lateinit var binding: GroupFragmentBinding
     private var code: Int = 0
 
-    @Inject
-    lateinit var viewModel: GroupViewModel
+    private lateinit var fragmentState: FragmentState
 
-    @Inject
-    lateinit var dir: DirApi
-
-    @Inject
-    lateinit var image: ImageApi
+    @Inject lateinit var viewModel: GroupViewModel
+    @Inject lateinit var dir: DirImage
+    @Inject lateinit var image: ImageApi
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        if (!retainInstance ) {
-            retainInstance = true
-
+    ): View {
+        if (!this::binding.isInitialized ) {
+            fragmentState = FragmentState.Cancel()
             App.component()!!.inject(this)
 
             binding = DataBindingUtil.inflate(inflater, R.layout.group_fragment, container, false);
@@ -52,19 +49,22 @@ class GroupFragment : Fragment() {
             if(code == 1){
                 binding.deleteItem.visibility = View.INVISIBLE
             } else if(code == 2){
-                var group = requireArguments().getSerializable("group") as GroupEntity
+                val group = requireArguments().getSerializable("group") as GroupEntity
+                viewModel.url = group.url
                 viewModel.group.set(group)
                 binding.deleteItem.visibility = View.VISIBLE
-                binding.groupImage.setImageURI(Uri.parse(dir.applicationPath + "/" +  viewModel.group.get()!!.url))
+                binding.groupImage.setImageURI(Uri.parse(dir.pathImage + "/" +  viewModel.group.get()!!.url))
             }
         }
 
         return binding.root
     }
 
-    fun deleteGroup(view: View){
+    fun deleteGroup(){
+        fragmentState = FragmentState.Delete()
         var bundle = Bundle()
         bundle.putInt("code", code)
+        viewModel.group.get()?.url = viewModel.url
         bundle.putSerializable("group", viewModel.group.get())
         setFragmentResult("Delete", bundle)
         requireActivity().onBackPressed()
@@ -72,11 +72,12 @@ class GroupFragment : Fragment() {
         //setResult(ActivityPostCode.DELETE_ITEM, newIntent)
     }
 
-    fun saveGroup(view: View){
+    fun saveGroup(){
+        fragmentState = FragmentState.Save()
         var bundle = Bundle()
         bundle.putInt("code", code)
+        viewModel.group.get()?.url = viewModel.url
         bundle.putSerializable("group", viewModel.group.get())
-        bundle.putString("old_url", viewModel.old_url)
         setFragmentResult("Save", bundle)
         requireActivity().onBackPressed()
         //parentFragmentManager.popBackStack()
@@ -84,7 +85,7 @@ class GroupFragment : Fragment() {
         //setResult(ActivityPostCode.SAVE_ITEM, newIntent)
     }
 
-    fun openPicture(view: View){
+    fun openPicture(){
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
@@ -103,14 +104,42 @@ class GroupFragment : Fragment() {
     private fun createImageCacheAndReplaceImagePath(data: Intent?){
         GlobalScope.launch(Dispatchers.Main) {
             val bitmap: Bitmap = async { MediaStore.Images.Media.getBitmap(activity?.contentResolver, data?.data) }.await()
-            val shortPath = async { image.createImageCache(bitmap, dir.applicationPath!!) }.await()
+            val shortPath = async { image.createImageCache(bitmap, dir.pathImage) }.await()
 
-            val group = viewModel.group.get()!!
-            viewModel.old_url = group.url
-            group.url = shortPath
+            if (viewModel.url != "") {
+                if (viewModel.old_url != ""){
+                    image.deleteImage(dir.pathImage + "/" + viewModel.url)
+                } else{
+                    viewModel.old_url = viewModel.url
+                }
+            }
 
-            viewModel.group.set(group)
-            binding.groupImage.setImageURI(Uri.parse(dir.applicationPath + "/" + group.url))
+            viewModel.url = shortPath
+            binding.groupImage.setImageURI(Uri.parse(dir.pathImage + "/" + viewModel.url))
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        when(fragmentState){
+            is FragmentState.Save -> {
+                if (viewModel.old_url != "")
+                    image.deleteImage("${dir.pathImage}/${viewModel.old_url}")
+            }
+            is FragmentState.Delete -> {
+                if (viewModel.group.get()?.url != "")
+                    image.deleteImage("${dir.pathImage}/${viewModel.url}")
+                if (viewModel.old_url != "")
+                    image.deleteImage("${dir.pathImage}/${viewModel.old_url}")
+            }
+            is FragmentState.Cancel -> {
+                if (viewModel.group.get()?.id == 0.toLong() && viewModel.url != "")
+                    image.deleteImage("${dir.pathImage}/${viewModel.url}")
+                if (viewModel.group.get()?.id == 0.toLong() && viewModel.old_url != "")
+                    image.deleteImage("${dir.pathImage}/${viewModel.old_url}")
+                if (viewModel.old_url != "")
+                    image.deleteImage("${dir.pathImage}/${viewModel.url}")
+            }
         }
     }
 }

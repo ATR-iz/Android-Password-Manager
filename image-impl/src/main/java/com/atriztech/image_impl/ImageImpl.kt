@@ -6,9 +6,11 @@ import java.io.File
 import java.io.FileOutputStream
 
 class ImageImpl: ImageApi {
-    override fun createImageCache(bitmap: Bitmap, applicationPath: String): String {
-        val imageDir = applicationPath + "/tmp_image"
+    override fun deleteImage(path: String) {
+        File(path).delete()
+    }
 
+    override fun createImageCache(bitmap: Bitmap, imageDir: String): String {
         val image = File.createTempFile("cache_", ".jpg", File(imageDir))
         val stream = FileOutputStream(image)
 
@@ -19,7 +21,7 @@ class ImageImpl: ImageApi {
         stream.flush()
         stream.close()
 
-        return File(imageDir).name + "/" + image.name
+        return image.name
     }
 
     private fun cutImage(bmp: Bitmap): Bitmap{

@@ -1,4 +1,4 @@
-package com.atriztech.passwordmanager.view
+package com.atriztech.passwordmanager.view.fragmentlistgroups
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,9 +15,8 @@ import com.atriztech.passwordmanager.service.di.App
 import com.atriztech.passwordmanager.R
 import com.atriztech.passwordmanager.databinding.ListGroupsFragmentBinding
 import com.atriztech.passwordmanager.model.entity.GroupEntity
-import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsDelegate
-import com.atriztech.passwordmanager.view.recyclerviewadapters.ListGroupsRecyclerViewAdapter
-import com.atriztech.passwordmanager.viewmodels.ListGroupsViewModel
+import com.atriztech.passwordmanager.view.fragmentlistgroups.ListGroupsDelegate
+import com.atriztech.passwordmanager.view.fragmentlistgroups.ListGroupsRecyclerViewAdapter
 import java.io.File
 import javax.inject.Inject
 
@@ -25,22 +24,14 @@ class ListGroupsFragment: Fragment() {
     private lateinit var binding: ListGroupsFragmentBinding
     private var password = ""
 
-    @Inject
-    lateinit var viewModel: ListGroupsViewModel
-
-    @Inject
-    lateinit var recyclerView: ListGroupsRecyclerViewAdapter
-
-    @Inject
-    lateinit var dir: DirApi
+    @Inject lateinit var viewModel: ListGroupsViewModel
+    @Inject lateinit var recyclerView: ListGroupsRecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        if (!retainInstance ) {
-            retainInstance = true
-
+    ): View {
+        if (!this::binding.isInitialized ) {
             App.component()!!.inject(this)
 
             setFragmentResultListener("Save") { _, bundle ->
@@ -89,65 +80,38 @@ class ListGroupsFragment: Fragment() {
 
     private fun saveGroup(bundle: Bundle){
         val code =  bundle.getInt("code")
-        if (code == 1){
-            val group =  bundle.getSerializable("group") as GroupEntity
-            group.url = moveImageToOriginalDir(group.url)
+        val group =  bundle.getSerializable("group") as GroupEntity
 
-            viewModel.addGroupToDB(group)
-        } else if(code == 2){
-            val group =  bundle.getSerializable("group") as GroupEntity
-            val oldPicturePath =  bundle.getString("old_url") as String
-
-            if(oldPicturePath != "") File(dir.applicationPath + "/" + oldPicturePath).delete()
-
-            group.url = moveImageToOriginalDir(group.url)
-
-            viewModel.updateGroupToDB(group)
-            recyclerView.UpdateItem(group)
+        when(code) {
+            1 -> viewModel.addGroupToDB(group)
+            2 -> {
+                viewModel.updateGroupToDB(group)
+                recyclerView.UpdateItem(group)
+            }
         }
     }
 
     private fun deleteGroup(bundle: Bundle){
         val group =  bundle.getSerializable("group") as GroupEntity
-
-        if(group.url != ""){
-            File(dir.applicationPath + "/" + group.url).delete()
-        }
-
         viewModel.deleteGroupFromDB(group)
         recyclerView.DeleteItem(group)
     }
 
-    private fun moveImageToOriginalDir(tmpPath: String): String{
-        var originalPath = tmpPath
-
-        if(tmpPath.indexOf("tmp_image") >= 0){
-            originalPath = tmpPath.replace("tmp_image", "image")
-
-            File(dir.applicationPath + "/" + tmpPath).let { sourceFile ->
-                sourceFile.copyTo(File(dir.applicationPath + "/" + originalPath))
-                sourceFile.delete()
-            }
-        }
-
-        return originalPath
-    }
-
     private fun openGroup(itemGroup: GroupEntity){
-        var bundle = Bundle()
+        val bundle = Bundle()
         bundle.putString("password", password)
         bundle.putSerializable("group", itemGroup)
         this.findNavController().navigate(R.id.action_list_groups_fragment_to_list_items_fragment, bundle)
     }
 
-    fun addNewGroup(view: View){
-        var bundle = Bundle()
+    fun addNewGroup(){
+        val bundle = Bundle()
         bundle.putInt("code", 1)
         this.findNavController().navigate(R.id.action_list_groups_fragment_to_group_fragment, bundle)
     }
 
     private fun editGroup(itemGroup: GroupEntity){
-        var bundle = Bundle()
+        val bundle = Bundle()
         bundle.putInt("code", 2)
         bundle.putSerializable("group", itemGroup)
         this.findNavController().navigate(R.id.action_list_groups_fragment_to_group_fragment, bundle)
